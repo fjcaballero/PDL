@@ -1,0 +1,17 @@
+S 		-> delS  | aPAL  | dNUM  | "CAD | /COMENT | +SASIG | -RASIG | <MIGUAL | +INCR | . | { | } | ( | ) | ! | = | [ | ] | , | br
+PAL 	-> aPAL  | dIDEN | _IDEN | lambda
+IDEN 	-> aIDEN | dIDEN | _IDEN | lambda 
+NUM		-> dNUM  | lambda
+CAD		-> " | ccCAD
+COMENT	-> *COMENT2
+COMENT2	-> *COMENT3 | ccCOMENT2
+COMENT3 -> /S | ccCOMENT2
+MIGUAL  -> = | lambda
+INCR	-> +
+SASIG	-> = | lambda
+RASIG	-> = | lambda
+
+del: delimitador
+a: letra a-z, A-Z
+d: digito 0-9
+br: salto de linea \r\n (Windows) o \n (Linux)
