@@ -1,0 +1,27 @@
+Terminales = { l d " / + - ( ) { } : , . < sl $ _ * = lambda }
+
+NoTerminales = { S PAL NUM CAD COMENT COMENT2 COMENT3 SUM RES MEN }
+
+Axioma = S
+
+Producciones = {
+
+S -> delS | lPAL | dNUM | "CAD | /COMENT | +SUM | -RES | ( | ) | { | } | : | , | . | <MEN | sl | $
+
+PAL -> lPAL | dPAL | _PAL | lambda
+
+NUM -> dNUM | lambda
+
+CAD -> ccCAD | "
+
+COMENT -> *COMENT2
+COMENT2 -> *COMENT3 | ccCOMENT2
+COMENT3 -> /S | ccCOMENT2
+
+SUM -> = | lambda
+
+RES -> = | lambda
+
+MEN -> = | lambda
+
+}
