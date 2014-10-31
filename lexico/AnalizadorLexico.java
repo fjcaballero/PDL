@@ -1,5 +1,6 @@
 package lexico;
 
+import global.Tablas;
 import global.Token;
 
 import java.io.FileNotFoundException;
@@ -10,10 +11,15 @@ import java.util.ArrayList;
 public class AnalizadorLexico {
 	private ArrayList<Token> tokensLeidos;
 	private FileReader fileReader;
+        private Tablas tabla;
+        private boolean carLeido;
+	private String caracter;
 
-
-	public AnalizadorLexico(String ficheroALeer){
+	public AnalizadorLexico(String ficheroALeer,Tablas tabla){
+                this.tabla = tabla;
 		this.tokensLeidos = new ArrayList<Token>();
+                carLeido = false;
+                caracter = "";
 		try {
 			this.fileReader = new FileReader("\""+ficheroALeer+"\"");
 		} catch (FileNotFoundException e) {
@@ -24,22 +30,27 @@ public class AnalizadorLexico {
 	}
 
 	/**
-	 * Método que identifica un token del fichero
+	 * Mï¿½todo que identifica un token del fichero
 	 * @return Devuelve un token identificado del fichero
 	 */
+        
 	public Token leerToken(){
 		Token token = null;
 		String lexema = "";
+                int valor = 0;
 		int estado = 0;
 		Caracter isChar = new Caracter(); //objeto para comprobar patrones
 		boolean leido = false;
-		String caracter;
 		while(!leido){
 			// Ejecutar automata
 			switch(estado){
 			case 0:
-				//Se entra con un caracter leido
-				caracter = leerCaracter();
+                                //Si ya se ha leido el caracter antes no es necesario volver a leerlo, sino se leerÃ¡.
+                                if(!carLeido){
+                                    caracter = leerCaracter();
+                                }
+                                carLeido = false;
+                                
 				if(isChar.esLetra(caracter)){
 					estado = 1;
 					// Acciones semanticas
@@ -47,6 +58,7 @@ public class AnalizadorLexico {
 				}
 				else if(isChar.esDigito(caracter)){
 					estado = 3;
+                                        lexema += caracter;
 				}
 				else if(caracter.equals("\"")){
 					estado = 5;
@@ -56,6 +68,7 @@ public class AnalizadorLexico {
 				}
 				else if(caracter.equals("+")){
 					estado = 10;
+                                        lexema += caracter;
 				}
 				else if(caracter.equals("=")){
 					estado = 13;
@@ -95,7 +108,103 @@ public class AnalizadorLexico {
 				}
 				break;
 			case 1:
+                                caracter = leerCaracter();
+                                if(isChar.esLetra(caracter)||isChar.esDigito(caracter)||caracter.equals("_")){
+                                    lexema += caracter;
+                                }
+                                else{
+                                    //el caracter que se ha leido se va a perder
+                                    carLeido = true;
+                                    estado = 2;
+                                }
 				break;
+                        case 2:
+                                if(tabla.esReservada(lexema)){
+                                   //token = Preservada, lexema;
+                                }
+                                else{
+                                    int posTS = tabla.estaTS(lexema);
+                                    if(posTS == -1){
+                                        posTS = tabla.aÃ±adirTS(lexema);
+                                    }
+                                    //token = id, posTS;   
+                                }
+                                leido = true;
+                                break;
+                        case 3:
+                                caracter = leerCaracter();
+                                if(isChar.esDigito(caracter)){
+                                    lexema += caracter;
+                                }
+                                else{
+                                    carLeido = true;
+                                    estado = 4;
+                                }
+                                break;
+                        case 4:
+                                valor = Integer.parseInt(lexema);
+                                //token = entero, valor;
+                                leido = true;
+                                break;
+                        case 5:
+                                caracter = leerCaracter();
+                                if(!caracter.equals("\"")){
+                                    lexema += caracter;
+                                }
+                                else{
+                                    //el caracter no se pierde porque es un "
+                                    estado = 6;
+                                }
+                                break;
+                        case 6:
+                                //token = cadena, lexema;
+                                leido = true;
+                                break;
+                        case 7:
+                                caracter = leerCaracter();
+                                if(caracter.equals("*")){
+                                    estado = 8;
+                                }
+                                else{
+                                    //ERROR
+                                    //Ignorar el error: estado = 0;
+                                }
+                                break;
+                        case 8:
+                                caracter = leerCaracter();
+                                if(caracter.equals("*")){
+                                    estado = 9;
+                                }
+                                break;
+                        case 9:
+                                caracter = leerCaracter();
+                                if(caracter.equals("/")){
+                                    estado = 0;
+                                }
+                                else{
+                                    estado = 8;
+                                }
+                                break;
+                        case 10:
+                                caracter = leerCaracter();
+                                if(caracter.equals("=")){
+                                    lexema += caracter;
+                                    estado = 12;
+                                }
+                                else{
+                                    //el caracter que se ha leido se va a perder
+                                    carLeido = true;
+                                    estado = 11;
+                                }
+                                break;
+                        case 11:
+                                //token = opArtim, +;
+                                leido = true;
+                                break;
+                        case 12:
+                                //token = opAsign +=;
+                                leido = true;
+                                break;
 			}
 		}
 		tokensLeidos.add(token);
@@ -103,7 +212,7 @@ public class AnalizadorLexico {
 	}
 
 	/**
-	 * Método que lee un carácter como un String
+	 * Mï¿½todo que lee un carï¿½cter como un String
 	 * @return Devuelve el caracter leido como un String
 	 * 
 	 */
