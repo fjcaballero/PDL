@@ -6,7 +6,7 @@ Axioma = S
 
 Producciones = {
 
-S -> delS | lPAL | dNUM | "CAD | /COMENT | +SUM | -RES | ( | ) | { | } | : | , | . | <MEN | sl | $
+S -> delS | lPAL | dNUM | "CAD | /COMENT | +SUM | -RES | ( | ) | { | } | : | , | . | <MEN | sl | $ | =
 
 PAL -> lPAL | dPAL | _PAL | lambda
 

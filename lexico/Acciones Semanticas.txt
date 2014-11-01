@@ -1,0 +1,34 @@
+00:01- lexema = caracter
+01:01- lexema += caracter
+01:02- si lexema = PReservada 
+		-> Generar token PReservada, lexema
+	 sino buscar lexema en TS, si no esta -> Añadir a TS y guardar posicion
+		-> Generar token id, posTS
+00:03- lexema = caracter
+03:03- lexema += caracter
+03:04- calcular valor lexema
+		-> Generar token entero, valor
+05:05- lexema += caracter
+05:06- 	-> Generar token cadena, lexema
+00:10- lexema = +
+10:11- 	-> Generar token opArit, +
+10:12- lexema += =
+		-> Generar token opAsig, +=
+00:13- lexema = -
+13:14- 	-> Generar token opArit, -
+13:15- lexema += =
+		-> Generar token opAsig, -=
+00:16- lexema = <
+16:17- 	-> Generar token opLog, <
+16:18- lexema += =
+		-> Generar token opAsig, <=
+00:19- 	-> Generar token abrePar
+00:20- 	-> Generar token cierraPar
+00:21- 	-> Generar token abreLLav
+00:22- 	-> Generar token cierraLLav
+00:23- 	-> Generar token dosPuntos
+00:24- 	-> Generar token coma
+00:25- 	-> Generar token punto
+00:26- 	-> Generar token finLinea
+00:27- 	-> Generar token finFichero
+00:28- 	-> Generar token opAsig, =
