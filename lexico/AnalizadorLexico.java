@@ -1,8 +1,9 @@
 package lexico;
 
 import global.Tablas;
-import global.token.Token;
+import global.token.*;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -11,15 +12,21 @@ import java.util.ArrayList;
 public class AnalizadorLexico {
 	private ArrayList<Token> tokensLeidos;
 	private FileReader fileReader;
+	private BufferedReader bufferReader;
+	private int lineaActual;
+	private int columnaActual;
 	private Tablas tabla;
 	private String caracter;
 
 	public AnalizadorLexico(String ficheroALeer,Tablas tabla){
+		this.lineaActual = 0;
+		this.columnaActual = 0;
 		this.tabla = tabla;
 		this.tokensLeidos = new ArrayList<Token>();
 		caracter = "";
 		try {
 			this.fileReader = new FileReader("\""+ficheroALeer+"\"");
+			this.bufferReader = new BufferedReader(fileReader);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			System.out.println("Error al leer el fichero");
@@ -143,6 +150,7 @@ public class AnalizadorLexico {
 			case 4:
 				valor = Integer.parseInt(lexema);
 				// generarToken(TokenEntero,valor) { token = new TokenEntero(valor) }
+				token = new TokenEntero(valor);
 				leido = true;
 				break;
 			case 5:
@@ -155,6 +163,7 @@ public class AnalizadorLexico {
 				break;
 			case 6:
 				// generarToken(TokenCadena,lexema) { token = new TokenCadena(lexema) }
+				token = new TokenCadena(lexema);
 				leido = true;
 				break;
 			case 7:
@@ -162,8 +171,9 @@ public class AnalizadorLexico {
 					estado = 8;
 				}
 				else{
-					//ERROR
-					//Ignorar el error: estado = 0;
+					// Error
+					System.out.println("Símbolo inesperado en línea" + lineaActual + "columna" + columnaActual);
+					return null;
 				}
 				break;
 			case 8:
@@ -191,12 +201,18 @@ public class AnalizadorLexico {
 				break;
 			case 11:
 				// generarToken(TokenOpArit,cod) { token = new TokenOpArit( codigo del "+") }
+				token = new TokenOpArit(1/*codigo del "+"*/);
 				leido = true;
 				break;
 			case 12:
 				// generarToken(TokenOpAsig,cod) { token = new TokenOpAsig( codigo del "+=") }
+				token = new TokenOpAsig(1/*codigo del "+="*/);
 				leido = true;
 				break;
+			default:
+				// Error
+				System.out.println("Símbolo inesperado en línea" + lineaActual + "columna" + columnaActual);
+				return null;
 			}
 		}
 		tokensLeidos.add(token);
@@ -211,7 +227,7 @@ public class AnalizadorLexico {
 		char aux;
 		String caracter = null;
 		try {
-			car = fileReader.read();
+			car = bufferReader.read();
 			if(car != -1){
 				aux = (char) car;
 				caracter = Character.toString(aux);
@@ -223,6 +239,11 @@ public class AnalizadorLexico {
 			// TODO Auto-generated catch block
 			System.out.println("Error al leer el fichero");
 			e.printStackTrace();
+		}
+		this.columnaActual++;
+		if(caracter.equals("\n") || caracter.equals("\r") || caracter.equals("\r\n")){
+			lineaActual++;
+			columnaActual = 0;
 		}
 		this.caracter = caracter;
 	}
