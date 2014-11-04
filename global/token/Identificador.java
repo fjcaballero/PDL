@@ -1,9 +1,9 @@
 package global.token;
 
-public class TokenId implements Token {
+public class Identificador implements Token {
 	private int posicion;
 	
-	public TokenId(int pos){
+	public Identificador(int pos){
 		this.posicion = pos;
 	}
 

@@ -1,10 +1,10 @@
 package global.token;
 
-public class TokenCadena implements Token {
+public class Cadena implements Token {
 	private String cadena;
 
 	
-	public TokenCadena(String cad){
+	public Cadena(String cad){
 		this.cadena = cad;
 	}
 	@Override

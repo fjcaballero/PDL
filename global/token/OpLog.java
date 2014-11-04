@@ -1,9 +1,9 @@
 package global.token;
 
-public class TokenPalRes implements Token {
+public class OpLog implements Token {
 	private int codigo;
-	
-	public TokenPalRes(int cod){
+
+	public OpLog(int cod){
 		this.codigo = cod;
 	}
 

@@ -1,9 +1,9 @@
 package global.token;
 
-public class TokenOpAsig implements Token {
+public class OpAsig implements Token {
 	private int codigo;
 
-	public TokenOpAsig(int cod){
+	public OpAsig(int cod){
 		this.codigo = cod;
 	}
 

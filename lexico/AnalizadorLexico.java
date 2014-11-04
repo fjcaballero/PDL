@@ -1,6 +1,6 @@
 package lexico;
 
-import global.Tablas;
+import global.tabla.TablaSimbolos;
 import global.token.*;
 
 import java.io.BufferedReader;
@@ -8,22 +8,41 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class AnalizadorLexico {
 	private ArrayList<Token> tokensLeidos;
 	private FileReader fileReader;
 	private BufferedReader bufferReader;
+	private String caracter;
 	private int lineaActual;
 	private int columnaActual;
-	private Tablas tabla;
-	private String caracter;
+	private Stack<TablaSimbolos> tablas;
+	private TablaSimbolos tablaActual;
+	
+	// Constantes
 
-	public AnalizadorLexico(String ficheroALeer,Tablas tabla){
+	// Aritmeticos
+	private final int SUMA = 1;
+	private final int RESTA = 2;
+
+	// Asignacion
+	private final int IGUAL = 1;
+	private final int MASIGUAL = 2;
+
+	// Logicos
+	private final int IGUALIGUAL = 1;
+	private final int MENORIGUAL = 2;
+	private final int MENOR = 3;
+
+
+	public AnalizadorLexico(String ficheroALeer/*,Stack<TablaSimbolos> pilaTS*/){
 		this.lineaActual = 0;
 		this.columnaActual = 0;
-		this.tabla = tabla;
+		//this.tablas = pilaTS;
+		//this.tablaActual = pilaTS.peek();
 		this.tokensLeidos = new ArrayList<Token>();
-		caracter = "";
+		this.caracter = "";
 		try {
 			this.fileReader = new FileReader("\""+ficheroALeer+"\"");
 			this.bufferReader = new BufferedReader(fileReader);
@@ -85,35 +104,47 @@ public class AnalizadorLexico {
 				else if(caracter.equals("<")){
 					estado = 16;
 				}
+				//------------------------------------------
 				else if(caracter.equals("(")){
-					estado = 19;
+					//token = new Simbolo("(");
+					leido = true;
 				}
 				else if(caracter.equals(")")){
-					estado = 20;
+					//token = new Simbolo(")");
+					leido = true;
 				}
 				else if(caracter.equals("{")){
-					estado = 21;
+					//token = new Simbolo("{");
+					leido = true;
 				}
 				else if(caracter.equals("}")){
-					estado = 22;
+					//token = new Simbolo("}");
+					leido = true;
 				}
 				else if(caracter.equals(":")){
-					estado = 23;
+					//token = new Simbolo(":");
+					leido = true;
 				}
 				else if(caracter.equals(",")){
-					estado = 24;
+					//token = new Simbolo(",");
+					leido = true;
 				}
 				else if(caracter.equals(".")){
-					estado = 25;
+					//token = new Simbolo(".");
+					leido = true;
 				}
 				else if(caracter.equals("\r\n")){
-					estado = 26;
+					//token = new Simbolo("sl");
+					leido = true;
 				}
 				else if(caracter.equals("$")){
-					estado = 27;
+					//token = new Simbolo("$");
+					leido = true;
 				}
 				else{
-					leido = true;
+					// Error
+					System.out.println("Símbolo inesperado en línea" + lineaActual + "columna" + columnaActual);
+					return null;
 				}
 				break;
 			case 1:
@@ -126,7 +157,8 @@ public class AnalizadorLexico {
 				break;
 			case 2:
 				/*
-				 * pos = tsActual.buscar(lexema)
+				 * //Hay que ver el flag de Def/Uso
+				 * pos = tsActual.buscarTS(lexema)
 				 * if (pos < num_palabrasReservadas && pos > 0)
 				 *  palabra reservada -> generarToken(TokenPalRes,pos) { token = new TokenPalRes(pos) }
 				 * else
@@ -150,7 +182,7 @@ public class AnalizadorLexico {
 			case 4:
 				valor = Integer.parseInt(lexema);
 				// generarToken(TokenEntero,valor) { token = new TokenEntero(valor) }
-				token = new TokenEntero(valor);
+				token = new Entero(valor);
 				leido = true;
 				break;
 			case 5:
@@ -163,7 +195,7 @@ public class AnalizadorLexico {
 				break;
 			case 6:
 				// generarToken(TokenCadena,lexema) { token = new TokenCadena(lexema) }
-				token = new TokenCadena(lexema);
+				token = new Cadena(lexema);
 				leido = true;
 				break;
 			case 7:
@@ -200,13 +232,45 @@ public class AnalizadorLexico {
 				}
 				break;
 			case 11:
-				// generarToken(TokenOpArit,cod) { token = new TokenOpArit( codigo del "+") }
-				token = new TokenOpArit(1/*codigo del "+"*/);
+				token = new OpArit(SUMA);
 				leido = true;
 				break;
 			case 12:
-				// generarToken(TokenOpAsig,cod) { token = new TokenOpAsig( codigo del "+=") }
-				token = new TokenOpAsig(1/*codigo del "+="*/);
+				token = new OpAsig(MASIGUAL);
+				leido = true;
+				break;
+			case 13:
+				if(caracter.equals("=")){
+					lexema+="=";
+					estado = 14;
+				}
+				else{
+					estado = 15;
+				}
+				break;
+			case 14:
+				token = new OpLog(IGUALIGUAL);
+				leido = true;
+				break;
+			case 15:
+				token = new OpAsig(IGUAL);
+				leido = true;
+				break;
+			case 16:
+				if(caracter.equals("=")){
+					lexema+="=";
+					estado = 17;
+				}
+				else{
+					estado = 18;
+				}
+				break;
+			case 17:
+				token = new OpLog(MENORIGUAL);
+				leido = true;
+				break;
+			case 18:
+				token = new OpLog(MENOR);
 				leido = true;
 				break;
 			default:
@@ -246,6 +310,22 @@ public class AnalizadorLexico {
 			columnaActual = 0;
 		}
 		this.caracter = caracter;
+	}
+
+	public ArrayList<Token> getTokensLeidos() {
+		return tokensLeidos;
+	}
+
+	public int getLineaActual() {
+		return lineaActual;
+	}
+
+	public int getColumnaActual() {
+		return columnaActual;
+	}
+
+	public String getCaracter() {
+		return caracter;
 	}
 
 }

@@ -1,9 +1,9 @@
 package global.token;
 
-public class TokenEntero implements Token {
+public class Entero implements Token {
 	private int valor;
 	
-	public TokenEntero(int valor){
+	public Entero(int valor){
 		this.valor = valor;
 	}
 	@Override

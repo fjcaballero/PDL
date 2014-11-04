@@ -1,9 +1,9 @@
 package global.token;
 
-public class TokenOpArit implements Token {
+public class PalRes implements Token {
 	private int codigo;
-
-	public TokenOpArit(int cod){
+	
+	public PalRes(int cod){
 		this.codigo = cod;
 	}
 
@@ -11,5 +11,4 @@ public class TokenOpArit implements Token {
 	public String aString() {
 		return "<" + this.toString() + "," + codigo + ">";
 	}
-
 }
