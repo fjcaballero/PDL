@@ -1,0 +1,10 @@
+switch
+case
+break
+return
+if
+function
+prompt
+document
+write
+var
