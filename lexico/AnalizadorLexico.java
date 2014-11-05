@@ -29,6 +29,7 @@ public class AnalizadorLexico {
 	// Asignacion
 	private final int IGUAL = 1;
 	private final int MASIGUAL = 2;
+	private final int MENOSIGUAL = 3;
 
 	// Logicos
 	private final int IGUALIGUAL = 1;
@@ -104,41 +105,44 @@ public class AnalizadorLexico {
 				else if(caracter.equals("<")){
 					estado = 16;
 				}
+				else if(caracter.equals("=")){''
+					token = new OpAsig(IGUAL);
+				}
 				//------------------------------------------
 				else if(caracter.equals("(")){
-					//token = new Simbolo("(");
+					token = new Simbolo("(");
 					leido = true;
 				}
 				else if(caracter.equals(")")){
-					//token = new Simbolo(")");
+					token = new Simbolo(")");
 					leido = true;
 				}
 				else if(caracter.equals("{")){
-					//token = new Simbolo("{");
+					token = new Simbolo("{");
 					leido = true;
 				}
 				else if(caracter.equals("}")){
-					//token = new Simbolo("}");
+					token = new Simbolo("}");
 					leido = true;
 				}
 				else if(caracter.equals(":")){
-					//token = new Simbolo(":");
+					token = new Simbolo(":");
 					leido = true;
 				}
 				else if(caracter.equals(",")){
-					//token = new Simbolo(",");
+					token = new Simbolo(",");
 					leido = true;
 				}
 				else if(caracter.equals(".")){
-					//token = new Simbolo(".");
+					token = new Simbolo(".");
 					leido = true;
 				}
 				else if(caracter.equals("\r\n")){
-					//token = new Simbolo("sl");
+					token = new Simbolo("sl");
 					leido = true;
 				}
 				else if(caracter.equals("$")){
-					//token = new Simbolo("$");
+					token = new Simbolo("$");
 					leido = true;
 				}
 				else{
