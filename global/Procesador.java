@@ -1,7 +1,9 @@
 package global;
 
 import global.tabla.TablaSimbolos;
-
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Stack;
 
 import lexico.AnalizadorLexico;
@@ -25,10 +27,25 @@ public class Procesador {
 			 // y aplicando las anotaciones semánticas
 			 
 			 anLex.setTablaActual(anSin.getTablaActual());			 
-			 
-			
 		}
+		
 		*/
+		PrintWriter writer;
+		try {
+			writer = new PrintWriter("tokens.txt", "UTF-8");
+			System.out.println("Imprimiendo lista de tokens...");
+			for(int i = 0; i < anLex.getTokensLeidos().size(); i++){
+				System.out.println(anLex.getTokensLeidos().get(i).aString());
+				writer.println(anLex.getTokensLeidos().get(i).aString());
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 }
