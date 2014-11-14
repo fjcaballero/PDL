@@ -30,7 +30,7 @@ public class ControladorTS {
         add("var");
     }};
     
-    public static void añadirTS(){
+    public static void crearTS(){
         pilaTablas.push(new TablaSimbolos());
     }
     

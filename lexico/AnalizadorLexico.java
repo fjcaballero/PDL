@@ -105,7 +105,7 @@ public class AnalizadorLexico {
 				else if(caracter.equals("<")){
 					estado = 16;
 				}
-				else if(caracter.equals("=")){''
+				else if(caracter.equals("=")){
 					token = new OpAsig(IGUAL);
 				}
 				//------------------------------------------

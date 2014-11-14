@@ -5,6 +5,7 @@ import java.util.regex.*;
 public class Caracter {
 	private Pattern letra = Pattern.compile("[a-zA-z]");
 	private Pattern digito = Pattern.compile("[0-9]");
+	private Pattern delimitador = Pattern.compile("[ \t\r\n\f]");
 	
 	public Caracter(){
 		
@@ -18,5 +19,10 @@ public class Caracter {
 	public boolean esDigito(String caracter){
 		Matcher isDigit = this.digito.matcher(caracter);
 		return isDigit.matches();
+	}
+	
+	public boolean esDelimitador(String caracter){
+		Matcher isDelimiter = this.delimitador.matcher(caracter);
+		return isDelimiter.matches();
 	}
 }
