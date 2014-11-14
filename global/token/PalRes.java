@@ -1,9 +1,9 @@
 package global.token;
 
 public class PalRes implements Token {
-	private int codigo;
+	private String codigo;
 	
-	public PalRes(int cod){
+	public PalRes(String cod){
 		this.codigo = cod;
 	}
 

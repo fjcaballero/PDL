@@ -1,6 +1,6 @@
 package lexico;
 
-import global.tabla.TablaSimbolos;
+import global.tabla.*;
 import global.token.*;
 
 import java.io.BufferedReader;
@@ -8,7 +8,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Stack;
 
 public class AnalizadorLexico {
 	private ArrayList<Token> tokensLeidos;
@@ -17,8 +16,6 @@ public class AnalizadorLexico {
 	private String caracter;
 	private int lineaActual;
 	private int columnaActual;
-	private Stack<TablaSimbolos> tablas;
-	private TablaSimbolos tablaActual;
 	
 	// Constantes
 
@@ -160,19 +157,20 @@ public class AnalizadorLexico {
 				}
 				break;
 			case 2:
-				/*
-				 * //Hay que ver el flag de Def/Uso
-				 * pos = tsActual.buscarTS(lexema)
-				 * if (pos < num_palabrasReservadas && pos > 0)
-				 *  palabra reservada -> generarToken(TokenPalRes,pos) { token = new TokenPalRes(pos) }
-				 * else
-				 * 	identificador ->
-				 * 		if (pos < 0)
-				 * 			posTS = tsActual.insertar(lexema)
-				 * 		else
-				 * 			posTS = pos
-				 * 		generarToken(TokenId,posTS) { token = new TokenId(posTS) }
-				 */
+                                /* Si es palabra reservada se genera el token PReservada, lexema */
+                                if(ControladorTS.esReservada(lexema)){
+                                    token = new PalRes(lexema);
+                                }
+                                /* Si es un id se busca en la TS y si no esta se añade
+                                 * y se genera el token Id, posTS
+                                 */
+                                else{
+                                    int pos = ControladorTS.buscarEnTS(lexema);
+                                    if(pos < 0){
+                                        pos = ControladorTS.insertarEnTS(lexema);
+                                    }
+                                    token = new Identificador(pos);
+                                }
 				leido = true;
 				break;
 			case 3:
