@@ -20,7 +20,7 @@ Configuración del repositorio:
 
     git merge upstream/master
 
-Para trabajar en Eclipse o Netbeans asegurarse de que se tiene el fichero .gitignore dentrod el directorio del proyecto con el siguiente contenido:
+Para trabajar en Eclipse o Netbeans asegurarse de que se tiene el fichero .gitignore dentro del directorio del proyecto con el siguiente contenido:
 
 	.classpath
 	.project
@@ -48,5 +48,5 @@ En el caso de que al crear el proyecto en Eclipse o Netbeans se creen ficheros .
 	.gitignore
 	*.class
 
-
+En cualquier caso, si se hacen los commit desde la aplicación de escritorio de Github, asegurarse de que los ficheros que NO hay que subir al repositorio remoto esten desmarcados (caja de la izquierda sin el tick), si es que aparece alguno.
 
