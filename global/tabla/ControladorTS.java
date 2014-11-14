@@ -7,7 +7,6 @@
 package global.tabla;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Stack;
 
 /**
@@ -43,6 +42,12 @@ public class ControladorTS {
     }
     public static boolean esReservada(String palabra){
         return tablaReservadas.contains(palabra);
+    }
+    public static int buscarEnTS(String id){
+        return pilaTablas.firstElement().buscarTS(id);
+    }
+    public static int insertarEnTS(String id){
+        return 0;//pilaTablas.firstElement().insertarTS(/*EntradaTS identificador*/, id);
     }
     
     
