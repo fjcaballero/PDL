@@ -1,6 +1,8 @@
 package global;
 
+import global.tabla.ControladorTS;
 import global.tabla.TablaSimbolos;
+import global.token.Simbolo;
 import global.token.Token;
 
 import java.io.FileNotFoundException;
@@ -17,14 +19,15 @@ public class Procesador {
 
 	public static void main(String[] args) {
 		String fichero = args[1];
-		TablaSimbolos TSGlobal = new TablaSimbolos();
-		Stack<TablaSimbolos> pilaTS = new Stack<TablaSimbolos>();
 		// Crear tabla de símbolos global en la pila
-		pilaTS.push(new TablaSimbolos());
-		AnalizadorLexico anLex = new AnalizadorLexico(fichero/*,pilaTS*/);
+		ControladorTS.crearTS("Global");
+		AnalizadorLexico anLex = new AnalizadorLexico(fichero);
 		while(!anLex.getCaracter().equals("$")){
+			anLex.getLog().println("Leyendo nuevo token");
 			anLex.leerToken();
+			anLex.getLog().println("-------------------");
 		}
+		anLex.getTokensLeidos().add(new Simbolo("$"));
 		try {
 			anLex.getFileReader().close();
 		} catch (IOException e1) {

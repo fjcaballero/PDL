@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 public class AnalizadorLexico {
@@ -17,6 +19,8 @@ public class AnalizadorLexico {
 	private String caracter;
 	private int lineaActual;
 	private int columnaActual;
+	private boolean flagSL;
+	private PrintWriter log;
 
 	// Constantes
 
@@ -38,19 +42,26 @@ public class AnalizadorLexico {
 	public AnalizadorLexico(String ficheroALeer/*,Stack<TablaSimbolos> pilaTS*/){
 		this.lineaActual = 0;
 		this.columnaActual = 0;
-		//this.tablas = pilaTS;
-		//this.tablaActual = pilaTS.peek();
 		this.tokensLeidos = new ArrayList<Token>();
 		this.caracter = "";
+		this.flagSL = false;
 		try {
 			String filePath = new File("").getAbsolutePath();
 			filePath = filePath.concat("\\resources\\" + ficheroALeer);
 			System.out.println(filePath);
 			this.fileReader = new FileReader(filePath);
 			this.bufferReader = new BufferedReader(fileReader);
+			// Se entra al automata (estado 0) con un caracter leido
+			leerCaracter();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			System.out.println("Error al leer el fichero");
+			e.printStackTrace();
+		}
+		try {
+			this.log = new PrintWriter("lexico\\log_lexico.txt","UTF-8");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 	}
@@ -68,12 +79,12 @@ public class AnalizadorLexico {
 		int estado = 0;
 		boolean leido = false;
 
-		// Se entra al automata (estado 0) con un caracter leido
-		leerCaracter();
-
 		while(!leido){
+			log.println("Lexema: "+lexema+"<");
 			// Ejecutar automata
-			if(estado != 0){
+			if(estado != 0 
+					&& estado != 2
+					&& estado != 4){
 				leerCaracter();
 			}
 			switch(estado){
@@ -102,53 +113,84 @@ public class AnalizadorLexico {
 				}
 				else if(caracter.equals("=")){
 					estado = 13;
+					lexema += caracter;
 				}
 				else if(caracter.equals("<")){
 					estado = 16;
-				}
-				else if(caracter.equals("=")){
-					token = new OpAsig(IGUAL);
+					lexema += caracter;
 				}
 				//------------------------------------------
 				else if(caracter.equals("(")){
 					token = new Simbolo("(");
+					lexema = "(";
 					leido = true;
+					log.println("Lexema: "+lexema+"<");
+					leerCaracter();
 				}
 				else if(caracter.equals(")")){
 					token = new Simbolo(")");
+					lexema = ")";
 					leido = true;
+					log.println("Lexema: "+lexema+"<");
+					leerCaracter();
 				}
 				else if(caracter.equals("{")){
 					token = new Simbolo("{");
+					lexema = "{";
 					leido = true;
+					log.println("Lexema: "+lexema+"<");
+					leerCaracter();
 				}
 				else if(caracter.equals("}")){
 					token = new Simbolo("}");
+					lexema = "}";
 					leido = true;
+					log.println("Lexema: "+lexema+"<");
+					leerCaracter();
 				}
 				else if(caracter.equals(":")){
 					token = new Simbolo(":");
+					lexema = ":";
 					leido = true;
+					log.println("Lexema: "+lexema+"<");
+					leerCaracter();
 				}
 				else if(caracter.equals(",")){
 					token = new Simbolo(",");
+					lexema = ",";
 					leido = true;
+					log.println("Lexema: "+lexema+"<");
+					leerCaracter();
 				}
 				else if(caracter.equals(".")){
 					token = new Simbolo(".");
+					lexema = ".";
 					leido = true;
+					log.println("Lexema: "+lexema+"<");
+					leerCaracter();
 				}
-				else if(caracter.equals("\r\n")){
+				else if(caracter.equals("sl")){
 					token = new Simbolo("sl");
+					lexema = "sl";
 					leido = true;
+					log.println("Lexema: "+lexema+"<");
+					leerCaracter();
+				}
+				else if(caracter.equals("flagSL")){
+					leerCaracter();
 				}
 				else if(caracter.equals("$")){
 					token = new Simbolo("$");
+					lexema = "$";
 					leido = true;
+					log.println("Lexema: "+lexema+"<");
 				}
 				else{
 					// Error
-					System.out.println("Símbolo inesperado en línea" + lineaActual + "columna" + columnaActual);
+					System.out.println("Símbolo inesperado en la línea " + lineaActual + ", columna " + columnaActual);
+					log.println("Símbolo inesperado en línea " + lineaActual + ", columna " + columnaActual);
+					leerCaracter();
+					leido = true;
 					return null;
 				}
 				break;
@@ -168,13 +210,13 @@ public class AnalizadorLexico {
 				/* Si es un id se busca en la TS y si no esta se añade
 				 * y se genera el token Id, posTS
 				 */
-				/*else{
+				else{
 					int pos = ControladorTS.buscarEnTS(lexema);
 					if(pos < 0){
 						pos = ControladorTS.insertarEnTS(lexema);
 					}
 					token = new Identificador(pos);
-				}*/
+				}
 				leido = true;
 				break;
 			case 3:
@@ -210,8 +252,11 @@ public class AnalizadorLexico {
 				}
 				else{
 					// Error
-					System.out.println("Símbolo inesperado en línea" + lineaActual + "columna" + columnaActual);
-					return null;
+					System.out.println("Símbolo inesperado en la línea " + lineaActual + ", columna " + columnaActual);
+					log.println("Símbolo inesperado en línea " + lineaActual + ", columna " + columnaActual);
+					leerCaracter();
+					token = null;
+					leido = true;
 				}
 				break;
 			case 8:
@@ -281,13 +326,16 @@ public class AnalizadorLexico {
 				break;
 			default:
 				// Error
-				System.out.println("Símbolo inesperado en línea" + lineaActual + "columna" + columnaActual);
-				return null;
+				System.out.println("Símbolo inesperado en la línea " + lineaActual + ", columna " + columnaActual);
+				log.println("Símbolo inesperado en línea " + lineaActual + ", columna " + columnaActual);
+				leerCaracter();
+				leido = true;
+				token = null;
 			}
 		}
 		if(token != null){
-			System.out.println("Añadiendo token " + token.aString() + " a la lista");
 			tokensLeidos.add(token);
+			log.println("Token leido:" + token.aString());
 		}
 		return token;
 	}
@@ -301,22 +349,30 @@ public class AnalizadorLexico {
 		String caracter = null;
 		try {
 			car = this.bufferReader.read();
-			if(car != -1){
+			if(car == 13){
+				this.flagSL = true;
+				caracter = "flagSL";
+			}
+			else if (car == 10 && flagSL){
+				caracter = "sl";
+				flagSL = false;
+			}
+			else if(car != -1){
 				aux = (char) car;
 				caracter = Character.toString(aux);
 			}
 			else{
 				caracter = "$";
+				log.println("Token leido:"+ new Simbolo("$").aString());
+				log.close();
 			}
-			//System.out.println(car); /////////////////////
-			//System.out.println(caracter); ////////////////////
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			System.out.println("Error al leer el fichero");
 			e.printStackTrace();
 		}
 		this.columnaActual++;
-		if(caracter.equals("\n") || caracter.equals("\r") || caracter.equals("\r\n")){
+		if(caracter.equals("sl")){
 			lineaActual++;
 			columnaActual = 0;
 		}
@@ -345,6 +401,9 @@ public class AnalizadorLexico {
 
 	public FileReader getFileReader() {
 		return fileReader;
+	}
+	public PrintWriter getLog() {
+		return log;
 	}
 
 }

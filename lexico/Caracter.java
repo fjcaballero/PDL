@@ -5,7 +5,7 @@ import java.util.regex.*;
 public class Caracter {
 	private Pattern letra = Pattern.compile("[a-zA-z]");
 	private Pattern digito = Pattern.compile("[0-9]");
-	private Pattern delimitador = Pattern.compile("[ \t\r\n\f]");
+	private Pattern delimitador = Pattern.compile("["+" "+"\\t"+"\\f"+"]");
 	
 	public Caracter(){
 		

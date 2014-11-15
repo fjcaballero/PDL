@@ -29,7 +29,7 @@ public class ControladorTS {
         add("var");
     }};
     
-    public static void crearTS(){
+    public static void crearTS(String nombre){
         pilaTablas.push(new TablaSimbolos());
     }
     
@@ -44,10 +44,25 @@ public class ControladorTS {
         return tablaReservadas.contains(palabra);
     }
     public static int buscarEnTS(String id){
-        return pilaTablas.firstElement().buscarTS(id);
+    	int pos = -1;
+    	boolean found = false;
+    	if(!pilaTablas.isEmpty()){
+    		for(int i=0; i < pilaTablas.size() && !found; i++){
+    			if(pilaTablas.get(i).buscarTS(id) > 0){
+    				pos = pilaTablas.get(i).buscarTS(id);
+    				found = true;
+    			}
+    		}
+    	}
+    	return pos;
     }
     public static int insertarEnTS(String id){
-        return 0;//pilaTablas.firstElement().insertarTS(/*EntradaTS identificador*/, id);
+    	if(!pilaTablas.isEmpty()){
+    		return pilaTablas.firstElement().insertarTS(new EntradaId(), id);
+    	}
+    	else{
+    		return -1;
+    	}
     }
     
     
