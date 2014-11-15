@@ -8,7 +8,7 @@ public class Entero implements Token {
 	}
 	@Override
 	public String aString() {
-		return "<" + this.toString() + "," + valor + ">";
+		return "<Entero," + valor + ">";
 	}
 
 }

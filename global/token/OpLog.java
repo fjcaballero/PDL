@@ -9,6 +9,6 @@ public class OpLog implements Token {
 
 	@Override
 	public String aString() {
-		return "<" + this.toString() + "," + codigo + ">";
+		return "<OpLog," + codigo + ">";
 	}
 }

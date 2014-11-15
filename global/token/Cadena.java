@@ -9,7 +9,7 @@ public class Cadena implements Token {
 	}
 	@Override
 	public String aString() {
-		return "<" + this.toString() + "," + "\"" + cadena + "\"" + ">";
+		return "<Cadena," + "\"" + cadena + "\"" + ">";
 	}
 
 }

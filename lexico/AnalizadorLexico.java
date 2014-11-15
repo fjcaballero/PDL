@@ -17,7 +17,7 @@ public class AnalizadorLexico {
 	private String caracter;
 	private int lineaActual;
 	private int columnaActual;
-	
+
 	// Constantes
 
 	// Aritmeticos
@@ -67,10 +67,10 @@ public class AnalizadorLexico {
 		int valor = 0;
 		int estado = 0;
 		boolean leido = false;
-		
+
 		// Se entra al automata (estado 0) con un caracter leido
 		leerCaracter();
-		
+
 		while(!leido){
 			// Ejecutar automata
 			if(estado != 0){
@@ -161,20 +161,20 @@ public class AnalizadorLexico {
 				}
 				break;
 			case 2:
-                                /* Si es palabra reservada se genera el token PReservada, lexema */
-                                if(ControladorTS.esReservada(lexema)){
-                                    token = new PalRes(lexema);
-                                }
-                                /* Si es un id se busca en la TS y si no esta se añade
-                                 * y se genera el token Id, posTS
-                                 */
-                                else{
-                                    int pos = ControladorTS.buscarEnTS(lexema);
-                                    if(pos < 0){
-                                        pos = ControladorTS.insertarEnTS(lexema);
-                                    }
-                                    token = new Identificador(pos);
-                                }
+				/* Si es palabra reservada se genera el token PReservada, lexema */
+				if(ControladorTS.esReservada(lexema)){
+					token = new PalRes(lexema);
+				}
+				/* Si es un id se busca en la TS y si no esta se añade
+				 * y se genera el token Id, posTS
+				 */
+				/*else{
+					int pos = ControladorTS.buscarEnTS(lexema);
+					if(pos < 0){
+						pos = ControladorTS.insertarEnTS(lexema);
+					}
+					token = new Identificador(pos);
+				}*/
 				leido = true;
 				break;
 			case 3:
@@ -285,7 +285,10 @@ public class AnalizadorLexico {
 				return null;
 			}
 		}
-		tokensLeidos.add(token);
+		if(token != null){
+			System.out.println("Añadiendo token " + token.aString() + " a la lista");
+			tokensLeidos.add(token);
+		}
 		return token;
 	}
 
@@ -305,6 +308,8 @@ public class AnalizadorLexico {
 			else{
 				caracter = "$";
 			}
+			//System.out.println(car); /////////////////////
+			//System.out.println(caracter); ////////////////////
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			System.out.println("Error al leer el fichero");
@@ -332,6 +337,14 @@ public class AnalizadorLexico {
 
 	public String getCaracter() {
 		return caracter;
+	}
+
+	public BufferedReader getBufferReader() {
+		return bufferReader;
+	}
+
+	public FileReader getFileReader() {
+		return fileReader;
 	}
 
 }

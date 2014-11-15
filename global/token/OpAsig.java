@@ -9,7 +9,7 @@ public class OpAsig implements Token {
 
 	@Override
 	public String aString() {
-		return "<" + this.toString() + "," + codigo + ">";
+		return "<OpAsig," + codigo + ">";
 	}
 
 }

@@ -1,9 +1,14 @@
 package global;
 
 import global.tabla.TablaSimbolos;
+import global.token.Token;
+
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Stack;
 
 import lexico.AnalizadorLexico;
@@ -17,8 +22,14 @@ public class Procesador {
 		// Crear tabla de símbolos global en la pila
 		pilaTS.push(new TablaSimbolos());
 		AnalizadorLexico anLex = new AnalizadorLexico(fichero/*,pilaTS*/);
-		while(anLex.getCaracter() != null){
+		while(!anLex.getCaracter().equals("$")){
 			anLex.leerToken();
+		}
+		try {
+			anLex.getFileReader().close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		//AnalizadorSintactico anSin = new AnalizadorSintactico();
 		/*
@@ -33,14 +44,19 @@ public class Procesador {
 		}
 		
 		*/
+		
+		// Listar tokens
 		PrintWriter writer;
 		try {
-			writer = new PrintWriter("tokens.txt", "UTF-8");
+			writer = new PrintWriter("resources\\tokens.txt", "UTF-8");
 			System.out.println("Imprimiendo lista de tokens...");
-			for(int i = 0; i < anLex.getTokensLeidos().size(); i++){
-				System.out.println(anLex.getTokensLeidos().get(i).aString());
-				writer.println(anLex.getTokensLeidos().get(i).aString());
+			Iterator<Token> it = anLex.getTokensLeidos().iterator();
+			while(it.hasNext()){
+				Token token = it.next();
+				System.out.println(token.aString());
+				writer.println(token.aString());
 			}
+			writer.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -2,3 +2,6 @@
 .project
 #*.gitignore
 *.class
+.settings
+tokens.txt
+

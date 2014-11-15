@@ -9,7 +9,7 @@ public class Identificador implements Token {
 
 	@Override
 	public String aString() {
-		return "<" + this.toString() + "," + posicion + ">";
+		return "<Id," + posicion + ">";
 	}
 
 }
