@@ -17,6 +17,9 @@ public class Procesador {
 		// Crear tabla de símbolos global en la pila
 		pilaTS.push(new TablaSimbolos());
 		AnalizadorLexico anLex = new AnalizadorLexico(fichero/*,pilaTS*/);
+		while(anLex.getCaracter() != null){
+			anLex.leerToken();
+		}
 		//AnalizadorSintactico anSin = new AnalizadorSintactico();
 		/*
 		while(!(anLex.getCaracter().equals("$"))){

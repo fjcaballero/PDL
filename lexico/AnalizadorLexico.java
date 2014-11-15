@@ -4,6 +4,7 @@ import global.tabla.*;
 import global.token.*;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -42,7 +43,10 @@ public class AnalizadorLexico {
 		this.tokensLeidos = new ArrayList<Token>();
 		this.caracter = "";
 		try {
-			this.fileReader = new FileReader("\""+ficheroALeer+"\"");
+			String filePath = new File("").getAbsolutePath();
+			filePath = filePath.concat("\\resources\\" + ficheroALeer);
+			System.out.println(filePath);
+			this.fileReader = new FileReader(filePath);
 			this.bufferReader = new BufferedReader(fileReader);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -293,7 +297,7 @@ public class AnalizadorLexico {
 		char aux;
 		String caracter = null;
 		try {
-			car = bufferReader.read();
+			car = this.bufferReader.read();
 			if(car != -1){
 				aux = (char) car;
 				caracter = Character.toString(aux);
