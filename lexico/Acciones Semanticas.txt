@@ -32,3 +32,4 @@
 00:26- 	-> Generar token finLinea
 00:27- 	-> Generar token finFichero
 00:28- 	-> Generar token opAsig, =
+00:29-	-> Generar token opLog, !

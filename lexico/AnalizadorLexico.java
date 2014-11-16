@@ -34,12 +34,13 @@ public class AnalizadorLexico {
 	private final int MENOSIGUAL = 3;
 
 	// Logicos
-	private final int IGUALIGUAL = 1;
-	private final int MENORIGUAL = 2;
+	private final int NEGACION = 1;
+        
+        // Relacion
+        private final int MENORIGUAL = 2;
 	private final int MENOR = 3;
 
-
-	public AnalizadorLexico(String ficheroALeer/*,Stack<TablaSimbolos> pilaTS*/){
+	public AnalizadorLexico(String ficheroALeer){
 		this.lineaActual = 0;
 		this.columnaActual = 0;
 		this.tokensLeidos = new ArrayList<Token>();
@@ -111,7 +112,7 @@ public class AnalizadorLexico {
 					estado = 10;
 					lexema += caracter;
 				}
-				else if(caracter.equals("=")){
+				else if(caracter.equals("-")){
 					estado = 13;
 					lexema += caracter;
 				}
@@ -185,6 +186,20 @@ public class AnalizadorLexico {
 					leido = true;
 					log.println("Lexema: "+lexema+"<");
 				}
+                                else if(caracter.equals("=")){
+					token = new OpAsig(IGUAL);
+					lexema = "=";
+					leido = true;
+					log.println("Lexema: "+lexema+"<");
+					leerCaracter();
+				}
+                                else if(caracter.equals("!")){
+					token = new OpLog(NEGACION);
+					lexema = "!";
+					leido = true;
+					log.println("Lexema: "+lexema+"<");
+					leerCaracter();
+				}
 				else{
 					// Error
 					System.out.println("Símbolo inesperado en la línea " + lineaActual + ", columna " + columnaActual);
@@ -229,7 +244,6 @@ public class AnalizadorLexico {
 				break;
 			case 4:
 				valor = Integer.parseInt(lexema);
-				// generarToken(TokenEntero,valor) { token = new TokenEntero(valor) }
 				token = new Entero(valor);
 				leido = true;
 				break;
@@ -242,7 +256,6 @@ public class AnalizadorLexico {
 				}
 				break;
 			case 6:
-				// generarToken(TokenCadena,lexema) { token = new TokenCadena(lexema) }
 				token = new Cadena(lexema);
 				leido = true;
 				break;
@@ -293,35 +306,35 @@ public class AnalizadorLexico {
 			case 13:
 				if(caracter.equals("=")){
 					lexema+="=";
-					estado = 14;
+					estado = 15;
 				}
 				else{
-					estado = 15;
+					estado = 14;
 				}
 				break;
 			case 14:
-				token = new OpLog(IGUALIGUAL);
+				token = new OpArit(RESTA);
 				leido = true;
 				break;
 			case 15:
-				token = new OpAsig(IGUAL);
+				token = new OpAsig(MENOSIGUAL);
 				leido = true;
 				break;
 			case 16:
 				if(caracter.equals("=")){
 					lexema+="=";
-					estado = 17;
+					estado = 18;
 				}
 				else{
-					estado = 18;
+					estado = 17;
 				}
 				break;
 			case 17:
-				token = new OpLog(MENORIGUAL);
+				token = new OpRel(MENORIGUAL);
 				leido = true;
 				break;
 			case 18:
-				token = new OpLog(MENOR);
+				token = new OpRel(MENOR);
 				leido = true;
 				break;
 			default:
@@ -367,7 +380,6 @@ public class AnalizadorLexico {
 				log.close();
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			System.out.println("Error al leer el fichero");
 			e.printStackTrace();
 		}
