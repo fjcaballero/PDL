@@ -1,9 +1,11 @@
 package global.token;
 
+/* 
+ * + / - / * / / / % /
+ * Implementados: + / - /
+ */
 public class OpArit implements Token {
 	private int codigo;
-	private final int SUMA = 1;
-	private final int RESTA = 2;
 
 	public OpArit(int cod){
 		this.codigo = cod;

@@ -1,5 +1,9 @@
 package global.token;
 
+/* 
+ * = / += / -= / *= / /= / %= / 
+ * Implementados: = / += / -= /
+ */
 public class OpAsig implements Token {
 	private int codigo;
 
