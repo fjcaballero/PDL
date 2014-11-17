@@ -36,8 +36,8 @@ public class AnalizadorLexico {
 	// Logicos
 	private final int NEGACION = 1;
         
-        // Relacion
-        private final int MENORIGUAL = 2;
+	// Relacion
+	private final int MENORIGUAL = 2;
 	private final int MENOR = 3;
 
 	public AnalizadorLexico(String ficheroALeer){
@@ -323,10 +323,10 @@ public class AnalizadorLexico {
 			case 16:
 				if(caracter.equals("=")){
 					lexema+="=";
-					estado = 18;
+					estado = 17;
 				}
 				else{
-					estado = 17;
+					estado = 18;
 				}
 				break;
 			case 17:
