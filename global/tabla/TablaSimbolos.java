@@ -8,7 +8,8 @@ public class TablaSimbolos {
 	private HashMap<String,Integer> indice;
 	private HashMap<Integer,EntradaTS> entradas;
 	
-	public TablaSimbolos(){
+	public TablaSimbolos(String nombre){
+		this.nombreTabla = nombre;
 		this.indice = new HashMap<String, Integer>();
 		this.entradas = new HashMap<Integer, EntradaTS>();
 	}
@@ -43,4 +44,9 @@ public class TablaSimbolos {
         }
         return pos; 
     }
+
+	public String getNombreTabla() {
+		return nombreTabla;
+	}
+    
 }

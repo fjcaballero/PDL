@@ -3,7 +3,7 @@ var mi_cadena = "ejemplo"
 document.write(mi_cadena)
 /* Comentario */
 function calcula (numero) {
-	/*
+	
 	switch (numero)
 {
 	case 1:
@@ -14,6 +14,6 @@ function calcula (numero) {
 			promt
 		}
 }
-*/
+
 	return numero + mi_numero
 }

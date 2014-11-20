@@ -37,8 +37,8 @@ public class AnalizadorLexico {
 	private final int NEGACION = 1;
 
 	// Relacion
-	private final int MENORIGUAL = 2;
-	private final int MENOR = 3;
+	private final int MENORIGUAL = 1;
+	private final int MENOR = 2;
 
 	public AnalizadorLexico(String ficheroALeer){
 		this.lineaActual = 0;
@@ -230,7 +230,7 @@ public class AnalizadorLexico {
 					if(pos < 0){
 						pos = ControladorTS.insertarEnTS(lexema);
 					}
-					token = new Identificador(pos);
+					token = new Identificador(ControladorTS.nombreTablaActual(),pos);
 				}
 				leido = true;
 				break;

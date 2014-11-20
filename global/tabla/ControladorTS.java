@@ -30,7 +30,7 @@ public class ControladorTS {
     }};
     
     public static void crearTS(String nombre){
-        pilaTablas.push(new TablaSimbolos());
+        pilaTablas.push(new TablaSimbolos(nombre));
     }
     
     public static void eliminarTS(){
@@ -64,6 +64,8 @@ public class ControladorTS {
     		return -1;
     	}
     }
-    
+    public static String nombreTablaActual(){
+    	return pilaTablas.firstElement().getNombreTabla();
+    }
     
 }
