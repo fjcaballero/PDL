@@ -35,7 +35,7 @@ public class AnalizadorLexico {
 
 	// Logicos
 	private final int NEGACION = 1;
-        
+
 	// Relacion
 	private final int MENORIGUAL = 2;
 	private final int MENOR = 3;
@@ -186,14 +186,14 @@ public class AnalizadorLexico {
 					leido = true;
 					log.println("Lexema: "+lexema+"<");
 				}
-                                else if(caracter.equals("=")){
+				else if(caracter.equals("=")){
 					token = new OpAsig(IGUAL);
 					lexema = "=";
 					leido = true;
 					log.println("Lexema: "+lexema+"<");
 					leerCaracter();
 				}
-                                else if(caracter.equals("!")){
+				else if(caracter.equals("!")){
 					token = new OpLog(NEGACION);
 					lexema = "!";
 					leido = true;
