@@ -1,0 +1,75 @@
+//// Gramatica VAST
+
+NoTerminales = { PROGRAMA0 PROGRAMA BLOQUE SALTO FUNCION EXPRESION CUERPO SENTENCIA CASE CASE2 ARGUMENTOS ARGUMENTOS2 LLAMADAFUN LLAMADAFUN2 ARITMETICA SIMPLE }
+
+Axioma = PROGRAMA0
+
+Terminales = { finFichero var id if abrePar cierraPar switch abreLlave cierraLlave
+ case break default dosPuntos function igual masIgual menosIgual document punto write prompt return lambda sl coma menor menorIgual mas menos negacion num cad }
+Producciones = {
+	
+	PROGRAMA0 -> PROGRAMA
+	
+	PROGRAMA -> BLOQUE SALTO PROGRAMA
+	PROGRAMA -> FUNCION SALTO PROGRAMA
+	PROGRAMA -> $
+	
+	BLOQUE -> var id
+	BLOQUE -> if ( EXPRESION ) SENTENCIA
+	BLOQUE -> if ( EXPRESION ) SALTO { SALTO CUERPO SALTO }
+	BLOQUE -> SENTENCIA
+	BLOQUE -> switch ( EXPRESION ) SALTO { SALTO CASE SALTO }
+	
+	CASE -> case EXPRESION : CUERPO CASE2
+	CASE -> default : CUERPO
+	
+	CASE2 -> break SALTO CASE
+	CASE2 -> CASE
+	
+	FUNCION -> function id ( ARGUMENTOS ) SALTO { SALTO CUERPO SALTO }
+	
+	SENTENCIA -> id = EXPRESION
+	SENTENCIA -> id += EXPRESION
+	SENTENCIA -> id -= EXPRESION
+	SENTENCIA -> id ( LLAMADAFUN )
+	SENTENCIA -> document . write ( EXPRESION )
+	SENTENCIA -> prompt ( id )
+	SENTENCIA -> return RETURNVALUE
+	
+	CUERPO -> BLOQUE SALTO CUERPO
+	CUERPO -> lambda
+	
+	SALTO -> sl SALTO
+	SALTO -> sl
+	
+	RETURNVALUE -> EXPRESION
+	RETURNVALUE -> lambda
+	
+	LLAMADAFUN -> EXPRESION LLAMADAFUN2
+	LLAMADAFUN -> lambda
+	
+	LLAMADAFUN2 -> , EXPRESION LLAMADAFUN2
+	LLAMADAFUN2 -> lambda
+	
+	ARGUMENTOS -> id ARGUMENTOS2
+	ARGUMENTOS -> lambda
+	
+	ARGUMENTOS2 -> , id ARGUMENTOS2
+	ARGUMENTOS2 -> lambda
+	
+	# Expresiones con precedencia: < <= ; + - ; ! ; ()
+	EXPRESION -> EXPRESION < ARITMETICA
+	EXPRESION -> EXPRESION <= ARITMETICA
+	EXPRESION -> ARITMETICA
+	
+	ARITMETICA -> ARITMETICA + SIMPLE
+	ARITMETICA -> ARITMETICA - SIMPLE
+	ARITMETICA -> SIMPLE
+	
+	SIMPLE -> ! SIMPLE
+	SIMPLE -> ( EXPRESION )
+	SIMPLE -> id
+	SIMPLE -> num
+	SIMPLE -> cad
+	SIMPLE -> id ( LLAMADAFUN )
+}
