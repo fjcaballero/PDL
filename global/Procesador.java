@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Stack;
 
+import sintactico.AnalizadorSintactico;
 import lexico.AnalizadorLexico;
 
 public class Procesador {
@@ -34,19 +35,16 @@ public class Procesador {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		//AnalizadorSintactico anSin = new AnalizadorSintactico();
-		/*
-		while(!(anLex.getCaracter().equals("$"))){
+		AnalizadorSintactico anSin = new AnalizadorSintactico("resources/Decision.dat","resources/GoTo.dat");
+		int codSintactico = 1;
+		while(!(anLex.getCaracter().equals("$")) && codSintactico==1){
 
-			 anSin.pedirToken(anLex);
-			 
 			 // anSin calcula el siguiente estado, actualizando sus variables
 			 // y aplicando las anotaciones semánticas
+			
+			 codSintactico =  anSin.analizar(anLex.leerToken());
 			 
-			 anLex.setTablaActual(anSin.getTablaActual());			 
 		}
-		
-		*/
 		
 		// Listar tokens
 		PrintWriter writer;
