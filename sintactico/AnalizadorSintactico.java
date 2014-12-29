@@ -15,6 +15,7 @@ public class AnalizadorSintactico {
 	private Stack<String> pila;
 	private ArrayList<String> tablaAccion;
 	private ArrayList<String> tablaGoTo;
+	private ArrayList<Regla> listaReglas;
 	
 	/* <AnalizadorSintactico>
 	 * 
@@ -46,6 +47,10 @@ public class AnalizadorSintactico {
 			System.out.println("Error al leer el fichero: "+ficheroGoTo);
 			e.printStackTrace();
 		}
+		
+		//Leer Fichero Reglas
+		listaReglas = new ArrayList<Regla>();
+		//Rellenar la lista en orden ascendente con las reglas del fichero
 		
 	}//Constructor
 	
@@ -88,16 +93,26 @@ public class AnalizadorSintactico {
 	public int analizar(Token token){//analizar
 		int resultado = 1; //En proceso
 		String estado = pila.peek();
-		/*
-		String accion = buscarTabla(estado,token,tablaAccion);
-		if(accion.equals("")){
-			//Error Sintactico
-			return -1;
+		String accion = buscarTabla(estado,token.tipo(),tablaAccion);
+		if(accion.charAt(0)=='d'){//Desplazar
+			pila.push(accion.substring(1,accion.length()).trim());
 		}
-		for(Regla.nElementos_ParteDerecha) do pila.pop
-		estado = buscarGoTo(pila.peek, Regla.ParteIzquierda)
-		pila.push(estado)
-		*/
+		else if(accion.charAt(0)=='r'){//Reducir
+			int numRegla = Integer.valueOf(accion.substring(1,accion.length()).trim());
+			Regla regla = listaReglas.get(numRegla-1);
+			for(int i=0; i<regla.nElementosDer; i++){//Sacamos de la pila n estados
+				pila.pop();
+			}
+			estado = buscarTabla(pila.peek(), regla.parteIzq, tablaGoTo);//Buscamos en la tabla GoTo el estado
+			pila.push(estado);//Guardamos el estado en la cima de la pila
+		}
+		else if(accion.charAt(0)=='A'){//Aceptar
+			resultado = 0;
+		}
+		else{
+			//Error Sintactico
+			resultado = -1;
+		}
 		return resultado;
 	}//analizar
 
