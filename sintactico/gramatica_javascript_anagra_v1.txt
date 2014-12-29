@@ -1,26 +1,25 @@
 //// Gramatica ANAGRA
 //// Gramatica LR(1)
-%token finFichero var id if abrePar cierraPar switch abreLlave cierraLlave
- case break default dosPuntos function igual masIgual menosIgual document punto write prompt return lambda sl coma menor menorIgual mas menos negacion num cad
+%token var id if abrePar cierraPar switch abreLlave cierraLlave
+ case break default dosPuntos function igual masIgual menosIgual document punto write prompt return sl coma menor menorIgual mas menos negacion num cad
  %%
-PROGRAMA0 : PROGRAMA;
-
-PROGRAMA : BLOQUE SALTO PROGRAMA;
-PROGRAMA : FUNCION SALTO PROGRAMA;
-PROGRAMA : finFichero;
+PROGRAMA : BLOQUE sl PROGRAMA;
+PROGRAMA : FUNCION sl PROGRAMA;
+PROGRAMA : BLOQUE;
+PROGRAMA : FUNCION;
 
 BLOQUE : var id;
 BLOQUE : if abrePar EXPRESION cierraPar SENTENCIA;
-BLOQUE : if abrePar EXPRESION cierraPar SALTO abreLlave SALTO CUERPO SALTO cierraLlave;
+BLOQUE : if abrePar EXPRESION cierraPar sl abreLlave sl CUERPO sl cierraLlave;
 BLOQUE : SENTENCIA;
-BLOQUE : switch abrePar EXPRESION cierraPar SALTO abreLlave SALTO CASE SALTO cierraLlave;
+BLOQUE : switch abrePar EXPRESION cierraPar sl abreLlave sl CASE sl cierraLlave;
 
 CASE : case EXPRESION dosPuntos CUERPO CASE2;
 CASE : default dosPuntos CUERPO;
-CASE2 : break SALTO CASE;
+CASE2 : break sl CASE;
 CASE2 : CASE;
 
-FUNCION : function id abrePar ARGUMENTOS cierraPar SALTO abreLlave SALTO CUERPO SALTO cierraLlave;
+FUNCION : function id abrePar ARGUMENTOS cierraPar sl abreLlave sl CUERPO sl cierraLlave;
 
 SENTENCIA : id igual EXPRESION;
 SENTENCIA : id masIgual EXPRESION;
@@ -30,26 +29,23 @@ SENTENCIA : document punto write abrePar EXPRESION cierraPar;
 SENTENCIA : prompt abrePar id cierraPar;
 SENTENCIA : return RETURNVALUE;
 
-CUERPO : BLOQUE SALTO CUERPO;
-CUERPO : lambda;
-
-SALTO : sl SALTO;
-SALTO : sl;
+CUERPO : BLOQUE sl CUERPO;
+CUERPO : ;
 
 RETURNVALUE : EXPRESION;
-RETURNVALUE : lambda;
+RETURNVALUE : ;
 
 LLAMADAFUN : EXPRESION LLAMADAFUN2;
-LLAMADAFUN : lambda;
+LLAMADAFUN : ;
 
 LLAMADAFUN2 : coma EXPRESION LLAMADAFUN2;
-LLAMADAFUN2 : lambda;
+LLAMADAFUN2 : ;
 
 ARGUMENTOS : id ARGUMENTOS2;
-ARGUMENTOS : lambda;
+ARGUMENTOS : ;
 
 ARGUMENTOS2 : coma id ARGUMENTOS2;
-ARGUMENTOS2 : lambda;
+ARGUMENTOS2 : ;
 
 EXPRESION : EXPRESION menor ARITMETICA;
 EXPRESION : EXPRESION menorIgual ARITMETICA;
