@@ -11,4 +11,9 @@ public class PalRes implements Token {
 	public String aString() {
 		return "<PalRes," + codigo + ">";
 	}
+
+	@Override
+	public String tipo() {
+		return codigo;
+	}
 }
