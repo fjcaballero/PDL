@@ -14,4 +14,9 @@ public class Identificador implements Token {
 		return "<Id," + tabla + "(" + posicion + ")" + ">";
 	}
 
+	@Override
+	public String tipo() {
+		return "id";
+	}
+
 }

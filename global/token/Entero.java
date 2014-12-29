@@ -10,5 +10,9 @@ public class Entero implements Token {
 	public String aString() {
 		return "<Entero," + valor + ">";
 	}
+	@Override
+	public String tipo() {
+		return "num";
+	}
 
 }

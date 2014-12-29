@@ -11,5 +11,9 @@ public class Cadena implements Token {
 	public String aString() {
 		return "<Cadena," + "\"" + cadena + "\"" + ">";
 	}
+	@Override
+	public String tipo() {
+		return "cad";
+	}
 
 }
