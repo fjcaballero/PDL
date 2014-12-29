@@ -25,20 +25,20 @@ public class AnalizadorLexico {
 	// Constantes
 
 	// Aritmeticos
-	private final int SUMA = 1;
-	private final int RESTA = 2;
+	public static final int SUMA = 1;
+	public static final int RESTA = 2;
 
 	// Asignacion
-	private final int IGUAL = 1;
-	private final int MASIGUAL = 2;
-	private final int MENOSIGUAL = 3;
+	public static final int IGUAL = 1;
+	public static final int MASIGUAL = 2;
+	public static final int MENOSIGUAL = 3;
 
 	// Logicos
-	private final int NEGACION = 1;
+	public static final int NEGACION = 1;
 
 	// Relacion
-	private final int MENORIGUAL = 1;
-	private final int MENOR = 2;
+	public static final int MENORIGUAL = 1;
+	public static final int MENOR = 2;
 
 	public AnalizadorLexico(String ficheroALeer){
 		this.lineaActual = 0;

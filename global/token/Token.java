@@ -3,6 +3,7 @@ package global.token;
 
 public interface Token {
 	
-	// Definición de operaciones
+	// Definicion de operaciones
 	public String aString();
+	public String tipo();
 }
