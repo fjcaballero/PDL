@@ -94,6 +94,9 @@ public class AnalizadorSintactico {
 			//Error Sintactico
 			return -1;
 		}
+		for(Regla.nElementos_ParteDerecha) do pila.pop
+		estado = buscarGoTo(pila.peek, Regla.ParteIzquierda)
+		pila.push(estado)
 		*/
 		return resultado;
 	}//analizar
