@@ -2,19 +2,23 @@ package sintactico;
 
 import global.token.Token;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Stack;
 
 public class AnalizadorSintactico {
-	
+
 	private Stack<String> pila;
 	private ArrayList<String> tablaAccion;
 	private ArrayList<String> tablaGoTo;
+	private ArrayList<Regla> listaReglas;
+	private ArrayList<Integer> parse;
 	
 	/* <AnalizadorSintactico>
 	 * 
@@ -22,10 +26,13 @@ public class AnalizadorSintactico {
 	 * 
 	 * Recibe como parametros la ubicacion de los ficheros de la tabla de Accion y de GoTo
 	 */
-	public AnalizadorSintactico(String ficheroAccion, String ficheroGoTo){//Constructor
+	public AnalizadorSintactico(String ficheroAccion, String ficheroGoTo, String ficheroReglas){//Constructor
 		
 		//Inicializar pila de estados
 		pila.push("0");
+		
+		//Inicializar parse
+		parse = new ArrayList<Integer>();
 		
 		//Leer Tabla Accion
 		try {
@@ -46,6 +53,10 @@ public class AnalizadorSintactico {
 			System.out.println("Error al leer el fichero: "+ficheroGoTo);
 			e.printStackTrace();
 		}
+		
+		//Leer Fichero Reglas
+		listaReglas = new ArrayList<Regla>();
+		cargarListaReglas(ficheroReglas);
 		
 	}//Constructor
 	
@@ -88,17 +99,59 @@ public class AnalizadorSintactico {
 	public int analizar(Token token){//analizar
 		int resultado = 1; //En proceso
 		String estado = pila.peek();
-		/*
-		String accion = buscarTabla(estado,token,tablaAccion);
-		if(accion.equals("")){
-			//Error Sintactico
-			return -1;
+		String accion = buscarTabla(estado,token.tipo(),tablaAccion);
+		if(accion.charAt(0)=='d'){//Desplazar
+			pila.push(accion.substring(1,accion.length()).trim());
 		}
-		for(Regla.nElementos_ParteDerecha) do pila.pop
-		estado = buscarGoTo(pila.peek, Regla.ParteIzquierda)
-		pila.push(estado)
-		*/
+		else if(accion.charAt(0)=='r'){//Reducir
+			int numRegla = Integer.valueOf(accion.substring(1,accion.length()).trim());
+			parse.add(numRegla);//Agregamos el numero de regla al parse
+			Regla regla = listaReglas.get(numRegla-1);
+			for(int i=0; i<regla.nElementosDer; i++){//Sacamos de la pila n estados
+				pila.pop();
+			}
+			estado = buscarTabla(pila.peek(), regla.parteIzq, tablaGoTo);//Buscamos en la tabla GoTo el estado
+			pila.push(estado);//Guardamos el estado en la cima de la pila
+		}
+		else if(accion.charAt(0)=='A'){//Aceptar
+			resultado = 0;
+		}
+		else{
+			//Error Sintactico
+			resultado = -1;
+		}
 		return resultado;
 	}//analizar
+	
+	
+	/**
+	 * cargarListaReglas
+	 * 
+	 * 
+	 */
+	public void cargarListaReglas(String ruta){//cargarListaReglas
+		try {
+			FileInputStream ficheroReglas = new FileInputStream(ruta);
+			BufferedReader br = new BufferedReader(new InputStreamReader(ficheroReglas));
+			String line;
+			String[] linea;
+			while ((line = br.readLine()) != null) {
+				linea = line.split(",", 3);
+				listaReglas.add(new Regla(Integer.parseInt(linea[0]),linea[1],Integer.parseInt(linea[2])));
+			}
+			br.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}//cargarListaReglas
+	
+	
+	public ArrayList<Integer> getParse() {
+		return parse;
+	}
 
 }
