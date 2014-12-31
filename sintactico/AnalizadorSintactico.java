@@ -2,9 +2,11 @@ package sintactico;
 
 import global.token.Token;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -115,5 +117,30 @@ public class AnalizadorSintactico {
 		}
 		return resultado;
 	}//analizar
+	
+	/**
+	 * cargarListaReglas
+	 * 
+	 * 
+	 */
+	public void cargarListaReglas(){
+		try {
+			FileInputStream ficheroReglas = new FileInputStream("resource/Reglas.txt");
+			BufferedReader br = new BufferedReader(new InputStreamReader(ficheroReglas));
+			String line;
+			String[] linea;
+			while ((line = br.readLine()) != null) {
+				linea = line.split(",", 3);
+				listaReglas.add(new Regla(Integer.parseInt(linea[0]),linea[1],Integer.parseInt(linea[2])));
+			}
+			br.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 }
