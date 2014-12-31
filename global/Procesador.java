@@ -23,9 +23,14 @@ public class Procesador {
 		// Crear tabla de símbolos global en la pila
 		ControladorTS.crearTS("Global");
 		AnalizadorLexico anLex = new AnalizadorLexico(fichero);
-		while(!anLex.getCaracter().equals("$")){
+		AnalizadorSintactico anSin = new AnalizadorSintactico("resources/"
+				+ "Decision.dat","resources/GoTo.dat","resources/reglas.txt");
+		int codSintactico = 1;
+		while(!anLex.getCaracter().equals("$") && codSintactico==1){
 			anLex.getLog().println("Leyendo nuevo token");
-			anLex.leerToken();
+			Token sigToken = anLex.leerToken();
+			System.out.println(sigToken.aString());
+			codSintactico =  anSin.analizar(sigToken);
 			anLex.getLog().println("-------------------");
 		}
 		anLex.getTokensLeidos().add(new Simbolo("$"));
@@ -34,16 +39,6 @@ public class Procesador {
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		}
-		AnalizadorSintactico anSin = new AnalizadorSintactico("resources/Decision.dat","resources/GoTo.dat","resource/Reglas.txt");
-		int codSintactico = 1;
-		while(!(anLex.getCaracter().equals("$")) && codSintactico==1){
-
-			// anSin calcula el siguiente estado, actualizando sus variables
-			// y aplicando las anotaciones semánticas
-
-			codSintactico =  anSin.analizar(anLex.leerToken());
-
 		}
 
 		// Listar tokens
