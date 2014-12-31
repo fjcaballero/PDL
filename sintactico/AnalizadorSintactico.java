@@ -13,11 +13,12 @@ import java.util.Iterator;
 import java.util.Stack;
 
 public class AnalizadorSintactico {
-	
+
 	private Stack<String> pila;
 	private ArrayList<String> tablaAccion;
 	private ArrayList<String> tablaGoTo;
 	private ArrayList<Regla> listaReglas;
+	private ArrayList<Integer> parse;
 	
 	/* <AnalizadorSintactico>
 	 * 
@@ -25,10 +26,13 @@ public class AnalizadorSintactico {
 	 * 
 	 * Recibe como parametros la ubicacion de los ficheros de la tabla de Accion y de GoTo
 	 */
-	public AnalizadorSintactico(String ficheroAccion, String ficheroGoTo){//Constructor
+	public AnalizadorSintactico(String ficheroAccion, String ficheroGoTo, String ficheroReglas){//Constructor
 		
 		//Inicializar pila de estados
 		pila.push("0");
+		
+		//Inicializar parse
+		parse = new ArrayList<Integer>();
 		
 		//Leer Tabla Accion
 		try {
@@ -52,7 +56,7 @@ public class AnalizadorSintactico {
 		
 		//Leer Fichero Reglas
 		listaReglas = new ArrayList<Regla>();
-		//Rellenar la lista en orden ascendente con las reglas del fichero
+		cargarListaReglas(ficheroReglas);
 		
 	}//Constructor
 	
@@ -101,6 +105,7 @@ public class AnalizadorSintactico {
 		}
 		else if(accion.charAt(0)=='r'){//Reducir
 			int numRegla = Integer.valueOf(accion.substring(1,accion.length()).trim());
+			parse.add(numRegla);//Agregamos el numero de regla al parse
 			Regla regla = listaReglas.get(numRegla-1);
 			for(int i=0; i<regla.nElementosDer; i++){//Sacamos de la pila n estados
 				pila.pop();
@@ -118,14 +123,15 @@ public class AnalizadorSintactico {
 		return resultado;
 	}//analizar
 	
+	
 	/**
 	 * cargarListaReglas
 	 * 
 	 * 
 	 */
-	public void cargarListaReglas(){
+	public void cargarListaReglas(String ruta){//cargarListaReglas
 		try {
-			FileInputStream ficheroReglas = new FileInputStream("resource/Reglas.txt");
+			FileInputStream ficheroReglas = new FileInputStream(ruta);
 			BufferedReader br = new BufferedReader(new InputStreamReader(ficheroReglas));
 			String line;
 			String[] linea;
@@ -141,6 +147,11 @@ public class AnalizadorSintactico {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}//cargarListaReglas
+	
+	
+	public ArrayList<Integer> getParse() {
+		return parse;
 	}
 
 }

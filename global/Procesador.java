@@ -35,17 +35,17 @@ public class Procesador {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		AnalizadorSintactico anSin = new AnalizadorSintactico("resources/Decision.dat","resources/GoTo.dat");
+		AnalizadorSintactico anSin = new AnalizadorSintactico("resources/Decision.dat","resources/GoTo.dat","resource/Reglas.txt");
 		int codSintactico = 1;
 		while(!(anLex.getCaracter().equals("$")) && codSintactico==1){
 
-			 // anSin calcula el siguiente estado, actualizando sus variables
-			 // y aplicando las anotaciones semánticas
-			
-			 codSintactico =  anSin.analizar(anLex.leerToken());
-			 
+			// anSin calcula el siguiente estado, actualizando sus variables
+			// y aplicando las anotaciones semánticas
+
+			codSintactico =  anSin.analizar(anLex.leerToken());
+
 		}
-		
+
 		// Listar tokens
 		PrintWriter writer;
 		try {
@@ -59,13 +59,30 @@ public class Procesador {
 			}
 			writer.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
+		// Listar parse
+		PrintWriter writerParse;
+		try {
+			writerParse = new PrintWriter("resources\\parse.txt", "UTF-8");
+			System.out.println("Imprimiendo parse...");
+			Iterator<Integer> itParse = anSin.getParse().iterator();
+			String parse = "Ascendente";
+			while(itParse.hasNext()){
+				int regla = itParse.next();
+				parse = parse + " " + regla;
+				System.out.println(regla);
+			}
+			writerParse.println(parse);
+			writerParse.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
