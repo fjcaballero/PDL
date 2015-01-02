@@ -1,5 +1,5 @@
-var mi_numero = 1
-var mi_cadena = "ejemplo"
+var mi_numero
+var mi_cadena
 document.write(mi_cadena)
 /* Comentario */
 function calcula (numero) {

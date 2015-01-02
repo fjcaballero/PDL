@@ -102,20 +102,24 @@ public class AnalizadorSintactico {
 		String estado = pila.peek();
 		System.out.println("Cima de la pila: "+ estado);
 		String accion = buscarTabla(estado,token.tipo(),tablaAccion);
+		System.out.println(accion);
 		if(accion.substring(0,1).equals("d")){//Desplazar
-			System.out.println("Estado al que se desplaza: " + accion.substring(1,accion.length()).trim());
 			pila.push(accion.substring(1,accion.length()).trim());
 		}
 		else if(accion.substring(0,1).equals("r")){//Reducir
 			int numRegla = Integer.valueOf(accion.substring(1,accion.length()).trim());
-			System.out.println("Regla por la que se reduce: " + numRegla);
 			parse.add(numRegla);//Agregamos el numero de regla al parse
 			Regla regla = listaReglas.get(numRegla-1);
-			for(int i=0; i<regla.nElementosDer; i++){//Sacamos de la pila n estados
-				pila.pop();
+			if(pila.size() < regla.nElementosDer){
+				resultado = -1;
 			}
-			estado = buscarTabla(pila.peek(), regla.parteIzq, tablaGoTo);//Buscamos en la tabla GoTo el estado
-			pila.push(estado);//Guardamos el estado en la cima de la pila
+			else{
+				for(int i=0; i<regla.nElementosDer; i++){//Sacamos de la pila n estados
+					pila.pop();
+				}
+				estado = buscarTabla(pila.peek(), regla.parteIzq, tablaGoTo);//Buscamos en la tabla GoTo el estado
+				pila.push(estado);//Guardamos el estado en la cima de la pila
+			}
 		}
 		else if(accion.substring(0,1).equals("A")){//Aceptar
 			resultado = 0;
@@ -129,9 +133,13 @@ public class AnalizadorSintactico {
 	
 	
 	/**
-	 * cargarListaReglas
-	 * 
-	 * 
+	 * <b><i>cargarListaReglas()</i></b>
+	 * <br>
+	 * <br>
+	 * <code>public void cargarListaReglas(String ruta)</code>
+	 * <br>
+	 * <br>
+	 * Carga la lista de reglas en un array list
 	 */
 	public void cargarListaReglas(String ruta){//cargarListaReglas
 		try {
@@ -153,7 +161,16 @@ public class AnalizadorSintactico {
 		}
 	}//cargarListaReglas
 	
-	
+	/**
+	 * <b><i>getParse()</i></b>
+	 * <br>
+	 * <br>
+	 * <code>public ArrayList<Integer> getPârse()</code>
+	 * <br>
+	 * <br>
+	 * Devuelve la lista de reglas aplicadas en el analisis
+	 * @return Un arraylist con las reglas utilizadas en el analisis
+	 */
 	public ArrayList<Integer> getParse() {
 		return parse;
 	}
