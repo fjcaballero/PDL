@@ -1,28 +1,32 @@
 //// Gramatica VAST
 
-NoTerminales = { PROGRAMA0 PROGRAMA BLOQUE SALTO FUNCION EXPRESION CUERPO SENTENCIA CASE CASE2 ARGUMENTOS ARGUMENTOS2 LLAMADAFUN LLAMADAFUN2 ARITMETICA SIMPLE RETURNVALUE}
+NoTerminales = { PROGRAMA0 PROGRAMA BLOQUE FUNCION EXPRESION CUERPO SENTENCIA CASE CASE2 ARGUMENTOS ARGUMENTOS2 LLAMADAFUN LLAMADAFUN2 ARITMETICA SIMPLE RETURNVALUE }
 
 Axioma = PROGRAMA0
 
-Terminales = { finFichero var id if abrePar cierraPar switch abreLlave cierraLlave
- case break default dosPuntos function igual masIgual menosIgual document punto write prompt return lambda sl coma menor menorIgual mas menos negacion num cad }
+Terminales = { finFichero var id if abrePar cierraPar switch abreLlave cierraLlave case break default dosPuntos function igual masIgual menosIgual document punto write prompt return sl coma menor menorIgual mas menos negacion num cad }
 Producciones = {
 	
 	PROGRAMA0 -> PROGRAMA  
 	PROGRAMA -> BLOQUE  sl  PROGRAMA  
 	PROGRAMA -> FUNCION  sl  PROGRAMA  
 	PROGRAMA -> BLOQUE  
-	PROGRAMA -> FUNCION  
+	PROGRAMA -> FUNCION
+	PROGRAMA -> lambda
+
 	BLOQUE -> var  id  
 	BLOQUE -> if  abrePar  EXPRESION  cierraPar  SENTENCIA  
 	BLOQUE -> if  abrePar  EXPRESION  cierraPar  sl  abreLlave  sl  CUERPO  sl  cierraLlave  
 	BLOQUE -> SENTENCIA  
-	BLOQUE -> switch  abrePar  EXPRESION  cierraPar  sl  abreLlave  sl  CASE  sl  cierraLlave  
+	BLOQUE -> switch  abrePar  EXPRESION  cierraPar  sl  abreLlave  sl  CASE  sl  cierraLlave
+
 	CASE -> case  EXPRESION  dosPuntos  CUERPO  CASE2  
 	CASE -> default  dosPuntos  CUERPO  
 	CASE2 -> break  sl  CASE  
 	CASE2 -> CASE  
+
 	FUNCION -> function  id  abrePar  ARGUMENTOS  cierraPar  sl  abreLlave  sl  CUERPO  sl  cierraLlave  
+
 	SENTENCIA -> id  igual  EXPRESION  
 	SENTENCIA -> id  masIgual  EXPRESION  
 	SENTENCIA -> id  menosIgual  EXPRESION  
@@ -30,24 +34,32 @@ Producciones = {
 	SENTENCIA -> document  punto  write  abrePar  EXPRESION  cierraPar  
 	SENTENCIA -> prompt  abrePar  id  cierraPar  
 	SENTENCIA -> return  RETURNVALUE  
+
 	CUERPO -> BLOQUE  sl  CUERPO  
 	CUERPO -> lambda
+
 	RETURNVALUE -> EXPRESION  
 	RETURNVALUE -> lambda
+
 	LLAMADAFUN -> EXPRESION  LLAMADAFUN2  
 	LLAMADAFUN -> lambda
+
 	LLAMADAFUN2 -> coma  EXPRESION  LLAMADAFUN2  
 	LLAMADAFUN2 -> lambda
+
 	ARGUMENTOS -> id  ARGUMENTOS2  
 	ARGUMENTOS -> lambda
 	ARGUMENTOS2 -> coma  id  ARGUMENTOS2  
 	ARGUMENTOS2 -> lambda
+
 	EXPRESION -> EXPRESION  menor  ARITMETICA  
 	EXPRESION -> EXPRESION  menorIgual  ARITMETICA  
 	EXPRESION -> ARITMETICA  
+
 	ARITMETICA -> ARITMETICA  mas  SIMPLE  
 	ARITMETICA -> ARITMETICA  menos  SIMPLE  
 	ARITMETICA -> SIMPLE  
+
 	SIMPLE -> negacion  SIMPLE  
 	SIMPLE -> abrePar  EXPRESION  cierraPar  
 	SIMPLE -> id  

@@ -1,5 +1,6 @@
 var mi_numero
 var mi_cadena
+/*
 document.write(mi_cadena)
 /* Comentario */
 function calcula (numero) {
@@ -17,3 +18,4 @@ function calcula (numero) {
 
 	return numero + mi_numero
 }
+*/

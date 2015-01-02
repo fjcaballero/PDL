@@ -17,28 +17,23 @@ import sintactico.AnalizadorSintactico;
 import lexico.AnalizadorLexico;
 
 public class Procesador {
-	// Crear tabla de símbolos global en la pila
 	private AnalizadorLexico anLex;
 	private AnalizadorSintactico anSin;
 
 	public Procesador(String fichero){
 		anLex = new AnalizadorLexico(fichero);
-		anSin = new AnalizadorSintactico("resources/"
+		anSin = new AnalizadorSintactico(anLex,"resources/"
 				+ "Decision.dat","resources/GoTo.dat","resources/reglas.txt");
 	}
 	
 	public static void main(String[] args) {
 		Procesador procesador = new Procesador(args[1]);
+		// Crear tabla de símbolos global en la pila
 		ControladorTS.crearTS("Global");
 		int codSintactico = 1;
-		while(!procesador.anLex.getCaracter().equals("$") && codSintactico==1){
-			procesador.anLex.getLog().println("Leyendo nuevo token");
-			Token sigToken = procesador.anLex.leerToken();
-			System.out.println(sigToken.aString());
-			codSintactico =  procesador.anSin.analizar(sigToken);
-			procesador.anLex.getLog().println("-------------------");
+		while(codSintactico==1){
+			codSintactico =  procesador.anSin.analizar();
 		}
-		procesador.anLex.getTokensLeidos().add(new Simbolo("$"));
 		try {
 			procesador.anLex.getFileReader().close();
 			procesador.listarTokens();
@@ -48,7 +43,12 @@ public class Procesador {
 			e1.printStackTrace();
 		}
 	}
-
+	/**
+	 * <i><b>listarParse()</b></i>
+	 * <br>
+	 * <br>
+	 * Genera un fichero parse.txt y lista el conjunto de reglas aplicadas
+	 */
 	private void listarParse(){
 		// Listar parse
 		PrintWriter writerParse;
@@ -75,6 +75,12 @@ public class Procesador {
 		}
 	}
 
+	/**
+	 * <i><b>listarTokens()</b></i>
+	 * <br>
+	 * <br>
+	 * Genera un fichero tokens.txt y lista el conjunto de tokens reconocidos
+	 */
 	private void listarTokens(){
 		// Listar tokens
 		PrintWriter writer;
