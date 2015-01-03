@@ -1,31 +1,32 @@
 //// Gramatica VAST
 
-NoTerminales = { PROGRAMA0 PROGRAMA BLOQUE FUNCION EXPRESION CUERPO SENTENCIA CASE CASE2 ARGUMENTOS ARGUMENTOS2 LLAMADAFUN LLAMADAFUN2 ARITMETICA SIMPLE RETURNVALUE }
+NoTerminales = { PROGRAMA0 PROGRAMA BLOQUE FUNCION SALTO SALTO2 EXPRESION CUERPO SENTENCIA CASE CASE2 ARGUMENTOS ARGUMENTOS2 LLAMADAFUN LLAMADAFUN2 ARITMETICA SIMPLE RETURNVALUE }
 
 Axioma = PROGRAMA0
 
 Terminales = { finFichero var id if abrePar cierraPar switch abreLlave cierraLlave case break default dosPuntos function igual masIgual menosIgual document punto write prompt return sl coma menor menorIgual mas menos negacion num cad }
 Producciones = {
-	
 	PROGRAMA0 -> PROGRAMA  
-	PROGRAMA -> BLOQUE  sl  PROGRAMA  
-	PROGRAMA -> FUNCION  sl  PROGRAMA  
+	
 	PROGRAMA -> BLOQUE  
 	PROGRAMA -> FUNCION
+	PROGRAMA -> BLOQUE  SALTO2  PROGRAMA  
+	PROGRAMA -> FUNCION  SALTO2  PROGRAMA  
 	PROGRAMA -> lambda
 
 	BLOQUE -> var  id  
+	BLOQUE -> SENTENCIA
 	BLOQUE -> if  abrePar  EXPRESION  cierraPar  SENTENCIA  
-	BLOQUE -> if  abrePar  EXPRESION  cierraPar  sl  abreLlave  sl  CUERPO  sl  cierraLlave  
-	BLOQUE -> SENTENCIA  
-	BLOQUE -> switch  abrePar  EXPRESION  cierraPar  sl  abreLlave  sl  CASE  sl  cierraLlave
+	BLOQUE -> if  abrePar  EXPRESION  cierraPar  SALTO  abreLlave  SALTO2  CUERPO  cierraLlave  
+	BLOQUE -> switch  abrePar  EXPRESION  cierraPar  SALTO  abreLlave  SALTO2  CASE  cierraLlave
 
+	CASE -> default  dosPuntos SALTO CUERPO  
+	CASE -> case  EXPRESION  dosPuntos  SALTO2  CASE2  
 	CASE -> case  EXPRESION  dosPuntos  CUERPO  CASE2  
-	CASE -> default  dosPuntos  CUERPO  
-	CASE2 -> break  sl  CASE  
 	CASE2 -> CASE  
+	CASE2 -> break  SALTO2  CASE  
 
-	FUNCION -> function  id  abrePar  ARGUMENTOS  cierraPar  sl  abreLlave  sl  CUERPO  sl  cierraLlave  
+	FUNCION -> function  id  abrePar  ARGUMENTOS  cierraPar SALTO abreLlave  SALTO2  CUERPO cierraLlave  
 
 	SENTENCIA -> id  igual  EXPRESION  
 	SENTENCIA -> id  masIgual  EXPRESION  
@@ -37,6 +38,11 @@ Producciones = {
 
 	CUERPO -> BLOQUE  sl  CUERPO  
 	CUERPO -> lambda
+
+	SALTO -> sl SALTO
+	SALTO -> lambda
+
+	SALTO2 -> sl SALTO
 
 	RETURNVALUE -> EXPRESION  
 	RETURNVALUE -> lambda

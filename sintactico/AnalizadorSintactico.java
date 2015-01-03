@@ -179,18 +179,18 @@ public class AnalizadorSintactico {
 			System.out.println("Accion: "+ accion);
 			if(accion.substring(0,1).equals("d")){//Desplazar
 				pila.push(accion.substring(1,accion.length()).trim());
-				if(flagSL){
-					while(flagSL && !entradaTipo.equals("$")){
-						entrada = anLex.leerToken();
-						entradaTipo = entrada.tipo();
-						if(!entrada.tipo().equals("sl")){
-							tokenEntrada = entrada;
-							flagSL = false;
-						}
-					}
-				}
-				else
-					tokenEntrada = anLex.leerToken();
+//				if(flagSL){
+//					while(flagSL && !entradaTipo.equals("$")){
+//						entrada = anLex.leerToken();
+//						entradaTipo = entrada.tipo();
+//						if(!entrada.tipo().equals("sl")){
+//							tokenEntrada = entrada;
+//							flagSL = false;
+//						}
+//					}
+//				}
+//				else
+				tokenEntrada = anLex.leerToken();
 			}
 			else if(accion.substring(0,1).equals("r")){//Reducir
 				int numRegla = Integer.valueOf(accion.substring(1,accion.length()).trim());
