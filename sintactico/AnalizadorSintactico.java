@@ -230,9 +230,11 @@ public class AnalizadorSintactico {
 			BufferedReader br = new BufferedReader(new InputStreamReader(ficheroReglas));
 			String line;
 			String[] linea;
+			int i = 1;
 			while ((line = br.readLine()) != null) {
-				linea = line.split(",", 3);
-				listaReglas.add(new Regla(Integer.parseInt(linea[0].trim()),linea[1].trim(),Integer.parseInt(linea[2].trim())));
+				linea = line.split(",", 2);
+				listaReglas.add(new Regla(i,linea[0].trim(),Integer.parseInt(linea[1].trim())));
+				i++;
 			}
 			br.close();
 		} catch (FileNotFoundException e) {
