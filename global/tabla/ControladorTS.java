@@ -20,6 +20,7 @@ public class ControladorTS {
         add("switch");
         add("case");
         add("break");
+        add("default");
         add("return");
         add("if");
         add("function");

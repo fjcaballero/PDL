@@ -11,16 +11,16 @@ PROGRAMA : ;
 
 BLOQUE : var id;
 BLOQUE : if abrePar EXPRESION cierraPar SENTENCIA;
-BLOQUE : if abrePar EXPRESION cierraPar sl abreLlave sl CUERPO sl cierraLlave;
+BLOQUE : if abrePar EXPRESION cierraPar sl abreLlave sl CUERPO cierraLlave;
 BLOQUE : SENTENCIA;
-BLOQUE : switch abrePar EXPRESION cierraPar sl abreLlave sl CASE sl cierraLlave;
+BLOQUE : switch abrePar EXPRESION cierraPar sl abreLlave sl CASE cierraLlave;
 
 CASE : case EXPRESION dosPuntos CUERPO CASE2;
 CASE : default dosPuntos CUERPO;
 CASE2 : break sl CASE;
 CASE2 : CASE;
 
-FUNCION : function id abrePar ARGUMENTOS cierraPar sl abreLlave sl CUERPO sl cierraLlave;
+FUNCION : function id abrePar ARGUMENTOS cierraPar sl abreLlave sl CUERPO cierraLlave;
 
 SENTENCIA : id igual EXPRESION;
 SENTENCIA : id masIgual EXPRESION;

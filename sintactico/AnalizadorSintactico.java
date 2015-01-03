@@ -169,17 +169,23 @@ public class AnalizadorSintactico {
 		String estado = pila.peek();
 		System.out.println("Cima de la pila: " + estado);
 		System.out.println("Token: "+ tokenEntrada.aString());
+		if(tokenEntrada.tipo().equals("sl")){
+			flagSL = true;
+		}
 		Token entrada = null;
+		String entradaTipo = "";
 		String accion = buscarTabla(estado,tokenEntrada.tipo(),tablaAccion);
 		if(accion != null){
 			System.out.println("Accion: "+ accion);
 			if(accion.substring(0,1).equals("d")){//Desplazar
 				pila.push(accion.substring(1,accion.length()).trim());
 				if(flagSL){
-					while(flagSL || entrada.equals("$")){
+					while(flagSL && !entradaTipo.equals("$")){
 						entrada = anLex.leerToken();
+						entradaTipo = entrada.tipo();
 						if(!entrada.tipo().equals("sl")){
 							tokenEntrada = entrada;
+							flagSL = false;
 						}
 					}
 				}
