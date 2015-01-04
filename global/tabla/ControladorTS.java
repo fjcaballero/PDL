@@ -30,6 +30,11 @@ public class ControladorTS {
         add("var");
     }};
     
+    
+    public static boolean esReservada(String palabra){
+        return tablaReservadas.contains(palabra);
+    }
+    
     public static void crearTS(String nombre){
         pilaTablas.push(new TablaSimbolos(nombre));
     }
@@ -37,13 +42,11 @@ public class ControladorTS {
     public static void eliminarTS(){
         pilaTablas.pop();
     }
-    /* Metodo de prueba */
-    public static int nElementos(){
-        return pilaTablas.size();
+    
+    public static String nombreTablaActual(){
+    	return pilaTablas.firstElement().getNombreTabla();
     }
-    public static boolean esReservada(String palabra){
-        return tablaReservadas.contains(palabra);
-    }
+    
     public static int buscarEnTS(String id){
     	int pos = -1;
     	boolean found = false;
@@ -65,8 +68,11 @@ public class ControladorTS {
     		return -1;
     	}
     }
-    public static String nombreTablaActual(){
-    	return pilaTablas.firstElement().getNombreTabla();
-    }
+
+	public static Stack<TablaSimbolos> getPilaTablas() {
+		return pilaTablas;
+	}
+    
+    
     
 }
