@@ -215,7 +215,8 @@ public class AnalizadorSintactico {
 		}		
 		else{
 			//Error Sintactico
-			System.out.println("Error sintáctico en la línea: "+ this.anLex.getLineaActual());
+			System.out.println("Error sintáctico en la línea: "+ this.anLex.getLineaActual() +
+					" columna:"+this.anLex.getColumnaActual());
 			resultado = -1;
 		}
 		return resultado;

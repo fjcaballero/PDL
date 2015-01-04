@@ -20,9 +20,8 @@ Producciones = {
 	BLOQUE -> if  abrePar  EXPRESION  cierraPar  SALTO  abreLlave  SALTO2  CUERPO  cierraLlave
 	BLOQUE -> switch  abrePar  EXPRESION  cierraPar  SALTO  abreLlave  SALTO2  CASE  cierraLlave
 
-	CASE -> default  dosPuntos SALTO CUERPO  
-	CASE -> case  EXPRESION  dosPuntos  SALTO2  CASE2  
-	CASE -> case  EXPRESION  dosPuntos  CUERPO  CASE2  
+	CASE -> default  dosPuntos SALTO CUERPO   
+	CASE -> case  EXPRESION  dosPuntos  SALTO CUERPO  CASE2  
 	CASE2 -> CASE  
 	CASE2 -> break  SALTO2  CASE  
 
