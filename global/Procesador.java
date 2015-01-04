@@ -36,8 +36,14 @@ public class Procesador {
 		}
 		try {
 			procesador.anLex.getFileReader().close();
-			procesador.listarTokens();
-			procesador.listarParse();
+			if(codSintactico == 0){
+				System.out.println("Compilación correcta");
+				procesador.listarTokens();
+				procesador.listarParse();
+			}
+		while(!ControladorTS.getPilaTablas().isEmpty()){
+			ControladorTS.eliminarTS();
+		}
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -54,20 +60,15 @@ public class Procesador {
 		PrintWriter writerParse;
 		try {
 			writerParse = new PrintWriter("resources\\parse.txt", "UTF-8");
-			// borrar linea
-			System.out.println("Imprimiendo parse...");
-			//
 			Iterator<Integer> itParse = anSin.getParse().iterator();
 			String parse = "Ascendente";
 			while(itParse.hasNext()){
 				int regla = itParse.next();
 				parse = parse + " " + regla;
-				// borrar linea
-				System.out.println(regla);
-				//
 			}
 			writerParse.println(parse);
 			writerParse.close();
+			System.out.println("Fichero parse.txt generado");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
@@ -86,18 +87,13 @@ public class Procesador {
 		PrintWriter writer;
 		try {
 			writer = new PrintWriter("resources\\tokens.txt", "UTF-8");
-			// borrar linea
-			System.out.println("Imprimiendo lista de tokens...");
-			//
 			Iterator<Token> it = anLex.getTokensLeidos().iterator();
 			while(it.hasNext()){
 				Token token = it.next();
-				// borrar linea
-				System.out.println(token.aString());
-				//
 				writer.println(token.aString());
 			}
 			writer.close();
+			System.out.println("Fichero tokens.txt generado");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {

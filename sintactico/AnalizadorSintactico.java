@@ -17,7 +17,9 @@ import lexico.AnalizadorLexico;
 
 public class AnalizadorSintactico {
 
-	private Stack<String> pila;
+	private Stack<String> pilaEstados;
+	private Stack<String> pilaSimbolos;
+	private Stack<String> pilaAtributos;
 	private Token tokenEntrada;
 	private AnalizadorLexico anLex;
 	private ArrayList<String> tAccion;
@@ -26,7 +28,6 @@ public class AnalizadorSintactico {
 	private HashMap<String,HashMap<String,String>> tablaGoTo;
 	private ArrayList<Regla> listaReglas;
 	private ArrayList<Integer> parse;
-	private boolean flagSL;
 
 
 	/**<i><b>AnalizadorSintactico()</b></i>
@@ -41,16 +42,16 @@ public class AnalizadorSintactico {
 	 * @param ficheroAccion
 	 * @param ficheroGoTo
 	 */
+	@SuppressWarnings("unchecked")
 	public AnalizadorSintactico(AnalizadorLexico anLex, String ficheroAccion, String ficheroGoTo, String ficheroReglas){//Constructor
 		this.anLex = anLex;
 		this.tokenEntrada = anLex.leerToken();
-		this.flagSL = false;
 		this.tablaAccion = new HashMap<String,HashMap<String,String>>();
 		this.tablaGoTo = new HashMap<String,HashMap<String,String>>();
 
 		//Inicializar pila de estados
-		pila = new Stack<String>();
-		pila.push("0");
+		pilaEstados = new Stack<String>();
+		pilaEstados.push("0");
 
 		//Inicializar parse
 		parse = new ArrayList<Integer>();
@@ -166,47 +167,43 @@ public class AnalizadorSintactico {
 	 */
 	public int analizar(){
 		int resultado = 1; //En proceso
-		String estado = pila.peek();
-		System.out.println("Cima de la pila: " + estado);
-		System.out.println("Token: "+ tokenEntrada.aString());
-		if(tokenEntrada.tipo().equals("sl")){
-			flagSL = true;
-		}
-		Token entrada = null;
-		String entradaTipo = "";
+		String estado = pilaEstados.peek();
+//		System.out.println("Cima de la pila: " + estado);
+//		System.out.println("Token: "+ tokenEntrada.aString());
 		String accion = buscarTabla(estado,tokenEntrada.tipo(),tablaAccion);
 		if(accion != null){
-			System.out.println("Accion: "+ accion);
+//			System.out.println("Accion: "+ accion);
 			if(accion.substring(0,1).equals("d")){//Desplazar
-				pila.push(accion.substring(1,accion.length()).trim());
-//				if(flagSL){
-//					while(flagSL && !entradaTipo.equals("$")){
-//						entrada = anLex.leerToken();
-//						entradaTipo = entrada.tipo();
-//						if(!entrada.tipo().equals("sl")){
-//							tokenEntrada = entrada;
-//							flagSL = false;
-//						}
-//					}
-//				}
-//				else
+				pilaEstados.push(accion.substring(1,accion.length()).trim());
 				tokenEntrada = anLex.leerToken();
+				
+				/* Acciones semanticas */
+				if(tokenEntrada.tipo().equals("function")){
+					//cambiar tabla de simbolos actual
+				}
 			}
 			else if(accion.substring(0,1).equals("r")){//Reducir
 				int numRegla = Integer.valueOf(accion.substring(1,accion.length()).trim());
-				parse.add(numRegla);//Agregamos el numero de regla al parse
+				parse.add(numRegla);
 				Regla regla = listaReglas.get(numRegla-1);
-				if(pila.size() < regla.nElementosDer){
+				
+				if(pilaEstados.size() < regla.nElementosDer){
 					resultado = -1;
 				}
 				else{
-					for(int i=0; i<regla.nElementosDer; i++){//Sacamos de la pila n estados
-						pila.pop();
+					for(int i=0; i<regla.nElementosDer; i++){
+						pilaEstados.pop();
 					}
-					estado = buscarTabla(pila.peek(), regla.parteIzq, tablaGoTo);//Buscamos en la tabla GoTo el estado
-					System.out.println("GOTO: " + estado);
-					pila.push(estado);//Guardamos el estado en la cima de la pila
+					estado = buscarTabla(pilaEstados.peek(), regla.parteIzq, tablaGoTo);
+//					System.out.println("GOTO: " + estado);
+					pilaEstados.push(estado);
 				}
+				
+				/* Acciones semanticas */
+				if(numRegla == 15 /*FUNCION -> ...*/){
+					//borrar tabla de simbolos de funcion
+				}
+				
 			}
 			else if(accion.substring(0,1).equals("A")){//Aceptar
 				resultado = 0;
