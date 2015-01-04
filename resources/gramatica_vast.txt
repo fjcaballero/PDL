@@ -17,7 +17,7 @@ Producciones = {
 	BLOQUE -> var  id  
 	BLOQUE -> SENTENCIA
 	BLOQUE -> if  abrePar  EXPRESION  cierraPar  SENTENCIA  
-	BLOQUE -> if  abrePar  EXPRESION  cierraPar  SALTO  abreLlave  SALTO2  CUERPO  cierraLlave  
+	BLOQUE -> if  abrePar  EXPRESION  cierraPar  SALTO  abreLlave  SALTO2  CUERPO  cierraLlave
 	BLOQUE -> switch  abrePar  EXPRESION  cierraPar  SALTO  abreLlave  SALTO2  CASE  cierraLlave
 
 	CASE -> default  dosPuntos SALTO CUERPO  
@@ -36,7 +36,7 @@ Producciones = {
 	SENTENCIA -> prompt  abrePar  id  cierraPar  
 	SENTENCIA -> return  RETURNVALUE  
 
-	CUERPO -> BLOQUE  sl  CUERPO  
+	CUERPO -> BLOQUE  SALTO2  CUERPO  
 	CUERPO -> lambda
 
 	SALTO -> sl SALTO
