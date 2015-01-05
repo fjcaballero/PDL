@@ -1,5 +1,9 @@
 package sintactico;
 
+import java.util.Stack;
+
+import semantico.Atributo;
+
 public class Regla {
 
 	public int numero;
@@ -14,5 +18,9 @@ public class Regla {
 
 	public String toString(){
 		return numero + "," + parteIzq + "," + nElementosDer;
+	}
+	
+	public String aplicar(int numRegla, Stack<Atributo> pilaSimbolos){
+		return "error";
 	}
 }
