@@ -1,0 +1,65 @@
+	PROGRAMA0 -> PROGRAMA  
+	
+	PROGRAMA -> BLOQUE  
+	PROGRAMA -> FUNCION
+	PROGRAMA -> BLOQUE  SALTO2  PROGRAMA  
+	PROGRAMA -> FUNCION  SALTO2  PROGRAMA  
+	PROGRAMA -> lambda
+
+	BLOQUE -> var  id  
+	BLOQUE -> SENTENCIA
+	BLOQUE -> if  abrePar  EXPRESION  cierraPar  SENTENCIA  
+	BLOQUE -> if  abrePar  EXPRESION  cierraPar  SALTO  abreLlave  SALTO2  CUERPO  cierraLlave
+	BLOQUE -> switch  abrePar  EXPRESION  cierraPar  SALTO  abreLlave  SALTO2  CASE  cierraLlave
+
+	CASE -> default  dosPuntos SALTO CUERPO   
+	CASE -> case  EXPRESION  dosPuntos  SALTO CUERPO  CASE2  
+	CASE2 -> CASE  
+	CASE2 -> break  SALTO2  CASE  
+
+	FUNCION -> function  id  abrePar  ARGUMENTOS  cierraPar SALTO abreLlave  SALTO2  CUERPO cierraLlave  
+
+	SENTENCIA -> id  igual  EXPRESION  
+	SENTENCIA -> id  masIgual  EXPRESION  
+	SENTENCIA -> id  menosIgual  EXPRESION  
+	SENTENCIA -> id  abrePar  LLAMADAFUN  cierraPar  
+	SENTENCIA -> document  punto  write  abrePar  EXPRESION  cierraPar  
+	SENTENCIA -> prompt  abrePar  id  cierraPar  
+	SENTENCIA -> return  RETURNVALUE  
+
+	CUERPO -> BLOQUE  SALTO2  CUERPO  
+	CUERPO -> lambda
+
+	SALTO -> sl SALTO
+	SALTO -> lambda
+
+	SALTO2 -> sl SALTO
+
+	RETURNVALUE -> EXPRESION  { RETURNVALUE.tipo = EXPRESION.tipo }
+	RETURNVALUE -> lambda { RETURNVALUE.tipo = "ok" }
+
+	LLAMADAFUN -> EXPRESION  LLAMADAFUN2 { if(EXPRESION.tipo = "ok" && LLAMADAFUN2.tipo="ok") then LLAMADAFUN.tipo = "ok" }
+	LLAMADAFUN -> lambda { LLAMADAFUN.tipo = "ok" }
+
+	LLAMADAFUN2 -> coma  EXPRESION  LLAMADAFUN2 { LLAMADAFUN2.tipo = LLAMADAFUN21.tipo }
+	LLAMADAFUN2 -> lambda { LLAMADAFUN2.tipo = "ok" }
+
+	ARGUMENTOS -> id  ARGUMENTOS2 { ARGUMENTOS2.tipo = ARGUMENTOS21.tipo }
+	ARGUMENTOS -> lambda { ARGUMENTOS.tipo = "ok" }
+	ARGUMENTOS2 -> coma  id  ARGUMENTOS21  { ARGUMENTOS2.tipo = ARGUMENTOS21.tipo }
+	ARGUMENTOS2 -> lambda { ARGUMENTOS2.tipo = "ok" }
+
+	EXPRESION -> EXPRESION  menor  ARITMETICA { if(EXPRESION1.tipo = entero/logico && ARITMETICA.tipo = entero/logico) then ARITMETICA.tipo = entero/logico else ARITMETICA.tipo = "error" }
+	EXPRESION -> EXPRESION1  menorIgual  ARITMETICA { if(EXPRESION1.tipo = entero/logico && ARITMETICA.tipo = entero/logico) then ARITMETICA.tipo = entero/logico else ARITMETICA.tipo = "error" }
+	EXPRESION -> ARITMETICA  { EXPRESION.tipo = ARITMETICA.tipo }
+
+	ARITMETICA -> ARITMETICA1  mas  SIMPLE  { if(ARITMETICA1.tipo = entero/logico && SIMPLE.tipo = entero/logico) then ARITMETICA.tipo = entero/logico else ARITMETICA.tipo = "error" }
+	ARITMETICA -> ARITMETICA1  menos  SIMPLE  { if(ARITMETICA1.tipo = entero/logico && SIMPLE.tipo = entero/logico) then ARITMETICA.tipo = entero/logico else ARITMETICA.tipo = "error" }
+	ARITMETICA -> SIMPLE  { ARITMETICA.tipo = SIMPLE.tipo }
+
+	SIMPLE -> negacion  SIMPLE1 { if(SIMPLE1.tipo = entero/logico) then SIMPLE.tipo = entero/logico } 
+	SIMPLE -> abrePar  EXPRESION  cierraPar  { SIMPLE.tipo = EXPRESION.tipo }
+	SIMPLE -> id { SIMPLE.tipo = buscaTipoTS(id.ent) }
+	SIMPLE -> num  { SIMPLE.tipo = entero/logico }
+	SIMPLE -> cad  { SIMPLE.tipo = cadena }
+	SIMPLE -> id  abrePar  LLAMADAFUN  cierraPar  { if(buscaTipoTS(id.ent)) = "X->T" && LLAMADAFUN.tipo = "X" then SIMPLE.tipo = "T" else SIMPLE.tipo = "error"}

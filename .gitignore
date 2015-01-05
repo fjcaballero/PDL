@@ -3,6 +3,8 @@
 #*.gitignore
 *.class
 .settings
+parse.txt
+fichero.js
 tokens.txt
 log_lexico.txt
 pruebas/*

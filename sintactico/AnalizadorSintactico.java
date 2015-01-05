@@ -13,13 +13,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Stack;
 
+import semantico.Atributo;
 import lexico.AnalizadorLexico;
 
 public class AnalizadorSintactico {
 
 	private Stack<String> pilaEstados;
-	private Stack<String> pilaSimbolos;
-	private Stack<String> pilaAtributos;
+	private Stack<Atributo> pilaSimbolos;
 	private Token tokenEntrada;
 	private AnalizadorLexico anLex;
 	private ArrayList<String> tAccion;
@@ -168,12 +168,13 @@ public class AnalizadorSintactico {
 	public int analizar(){
 		int resultado = 1; //En proceso
 		String estado = pilaEstados.peek();
-//		System.out.println("Cima de la pila: " + estado);
-//		System.out.println("Token: "+ tokenEntrada.aString());
+		System.out.println("Cima de la pila: " + estado);
+		System.out.println("Token: "+ tokenEntrada.aString());
 		String accion = buscarTabla(estado,tokenEntrada.tipo(),tablaAccion);
 		if(accion != null){
-//			System.out.println("Accion: "+ accion);
+			System.out.println("Accion: "+ accion);
 			if(accion.substring(0,1).equals("d")){//Desplazar
+//				pilaSimbolos.push(new Atributo(tokenEntrada.tipo(), null));
 				pilaEstados.push(accion.substring(1,accion.length()).trim());
 				tokenEntrada = anLex.leerToken();
 				
@@ -187,16 +188,21 @@ public class AnalizadorSintactico {
 				parse.add(numRegla);
 				Regla regla = listaReglas.get(numRegla-1);
 				
-				if(pilaEstados.size() < regla.nElementosDer){
+				if(pilaEstados.size() < regla.nElementosDer &&
+						pilaSimbolos.size() < regla.nElementosDer){
 					resultado = -1;
 				}
 				else{
+					String tipo = regla.aplicar(numRegla, pilaSimbolos);
 					for(int i=0; i<regla.nElementosDer; i++){
 						pilaEstados.pop();
+//						pilaSimbolos.pop();
 					}
 					estado = buscarTabla(pilaEstados.peek(), regla.parteIzq, tablaGoTo);
-//					System.out.println("GOTO: " + estado);
 					pilaEstados.push(estado);
+//					pilaSimbolos.push(new Atributo(regla.parteIzq,tipo));
+					System.out.println("GOTO: " + estado);
+					
 				}
 				
 				/* Acciones semanticas */
