@@ -9,10 +9,6 @@ package global.tabla;
 import java.util.ArrayList;
 import java.util.Stack;
 
-/**
- *
- * @author Javichuck
- */
 public class ControladorTS {
     
     private static Stack<TablaSimbolos> pilaTablas = new Stack<TablaSimbolos>();
@@ -62,7 +58,7 @@ public class ControladorTS {
     }
     public static int insertarEnTS(String id){
     	if(!pilaTablas.isEmpty()){
-    		return pilaTablas.firstElement().insertarTS(new EntradaId(), id);
+    		return pilaTablas.firstElement().insertarTS(id);
     	}
     	else{
     		return -1;
