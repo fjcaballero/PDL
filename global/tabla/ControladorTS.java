@@ -43,7 +43,7 @@ public class ControladorTS {
     	return pilaTablas.firstElement().getNombreTabla();
     }
     
-    public static int buscarEnTS(String id){
+    public static int buscaIdTS(String id){
     	int pos = -1;
     	boolean found = false;
     	if(!pilaTablas.isEmpty()){
@@ -56,13 +56,75 @@ public class ControladorTS {
     	}
     	return pos;
     }
-    public static int insertarEnTS(String id){
+    
+    /**
+     * <i><b>buscaTipoTS()</b></i>
+     * @param id
+     * @return Devuelve el tipo asignado al identificador, o "-" en caso de que 
+     * no este declarado o que no se le haya asignado tipo
+     */
+    public static String buscaTipoTS(String id){
+    	String tipo = "-";
+    	boolean found = false;
+    	if(!pilaTablas.isEmpty()){
+    		for(int i=0; i < pilaTablas.size() && !found; i++){
+    			tipo = pilaTablas.get(i).buscaTipoTS(id);
+    			if(!tipo.equals("-")){
+    				found = true;
+    			}
+    		}
+    	}
+    	return tipo;
+    }
+    
+    /**
+     * 
+     * @param id
+     * @return Devuelve el desplazamiento asignado al identificador, o "-" en caso de que 
+     * no este declarado o que no se le haya asignado desplazamiento
+     */
+    public static String buscaDespTS(String id){
+    	String desp = "-";
+    	boolean found = false;
+    	if(!pilaTablas.isEmpty()){
+    		for(int i=0; i < pilaTablas.size() && !found; i++){
+    			desp = pilaTablas.get(i).buscaDespTS(id);
+    			if(!desp.equals("-")){
+    				found = true;
+    			}
+    		}
+    	}
+    	return desp;
+    }
+    
+    public static int insertaIdTS(String id){
     	if(!pilaTablas.isEmpty()){
     		return pilaTablas.firstElement().insertarTS(id);
     	}
     	else{
     		return -1;
     	}
+    }
+    
+    /**
+     * <i><b>insertaTipoTS(String id, String tipo)</b></i>
+     * <br>
+     * Metodo que inserta el tipo especificado en la entrada de la tabla actual si la hubiera,
+     * o en la tabla global en caso contrario. Si el identificador no esta declarado devuelve false.
+     * @param id
+     * @param tipo
+     * @return Devuelve true si se ha insertado el tipo correctamente, y false en caso contrario
+     */
+    public static boolean insertaTipoTS(String id, String tipo){
+    	boolean insertado = false;
+    	if(!pilaTablas.isEmpty()){
+    		if(!pilaTablas.isEmpty()){
+    			for(int i=0; i < pilaTablas.size() && !insertado; i++){
+    				insertado = pilaTablas.get(i).insertaTipoTS(id, tipo);
+    			}
+    		}
+    	}
+    	return insertado;
     }
 
 	public static Stack<TablaSimbolos> getPilaTablas() {

@@ -36,6 +36,49 @@ public class TablaSimbolos {
     	}
         return pos;
     }
+    
+    public String buscaTipoTS(String lexema){
+    	String tipo = "-";
+    	if(!indice.isEmpty()){
+    		if(indice.containsKey(lexema)){
+    			tipo = entradas.get(lexema).getTipo();
+    		}
+    	}
+    	return tipo;
+    }
+
+    public String buscaDespTS(String lexema){
+        String desp = "-";
+        if(!indice.isEmpty()){
+            if(indice.containsKey(lexema)){
+                desp = entradas.get(lexema).getDesp();
+            }
+        }
+        return desp;
+    }
+
+    public int buscaNumParamTS(String lexema){
+        int nparam = 0;
+        if(!indice.isEmpty()){
+            if(indice.containsKey(lexema)){
+                nparam = entradas.get(lexema).getNumParam();
+            }
+        }
+        return nparam;
+    }
+
+    public String buscaTipoDevTS(String lexema){
+        String tipoDev = "-";
+        if(!indice.isEmpty()){
+            if(indice.containsKey(lexema)){
+                tipoDev = entradas.get(lexema).getTipoDev();
+            }
+        }
+        return tipoDev;
+    }
+
+
+    
     /**
      * Inserta un identificador en la tabla de símbolos.
      * @param tipoEntrada
@@ -52,6 +95,50 @@ public class TablaSimbolos {
         }
         return pos; 
     }
+    
+    public boolean insertaTipoTS(String lexema, String tipo){
+    	boolean res = false;
+    	if(!indice.isEmpty()){
+    		if(indice.containsKey(lexema)){
+    			entradas.get(lexema).setTipo(tipo);
+    			res = true;
+    		}
+    	}
+    	return res;
+    }
+    
+    public boolean insertaDespTS(String lexema, String desp){
+    	boolean res = false;
+    	if(!indice.isEmpty()){
+    		if(indice.containsKey(lexema)){
+    			entradas.get(lexema).setDesp(desp);
+    			res = true;
+    		}
+    	}
+    	return res;
+    }
+    
+    public boolean insertaNumParamTS(String lexema, int nparam){
+    	boolean res = false;
+    	if(!indice.isEmpty()){
+    		if(indice.containsKey(lexema)){
+    			entradas.get(lexema).setNumParam(nparam);
+    			res = true;
+    		}
+    	}
+    	return res;
+    }
+    
+    public boolean insertaTipoDevTS(String lexema, String tipoDev){
+    	boolean res = false;
+    	if(!indice.isEmpty()){
+    		if(indice.containsKey(lexema)){
+    			entradas.get(lexema).setTipoDev(tipoDev);
+    			res = true;
+    		}
+    	}
+    	return res;
+    }
 
 	public String getNombreTabla() {
 		return nombreTabla;
@@ -60,12 +147,7 @@ public class TablaSimbolos {
 	public void printTabla(){
 		PrintWriter writer;
 		try {
-			if(!this.nombreTabla.equals("Global")){
-				writer = new PrintWriter(new BufferedWriter(new FileWriter("resources\\tabla_simbolos.txt", true)));
-			}
-			else{
-				writer = new PrintWriter("resources\\tabla_simbolos.txt","UTF-8");
-			}
+			writer = new PrintWriter(new BufferedWriter(new FileWriter("resources\\tabla_simbolos.txt", true)));
 			writer.println("Tabla de símbolos: " +this.nombreTabla);
 			writer.println("+ POS +     LEXEMA     +     TIPO      +  DESP   +    NUMPARAM    +    TIPODEV");
 			writer.println("+-----+----------------+---------------+---------+----------------+-----------------");
