@@ -226,9 +226,9 @@ public class AnalizadorLexico {
 				 * y se genera el token Id, posTS
 				 */
 				else{
-					int pos = ControladorTS.buscarEnTS(lexema);
+					int pos = ControladorTS.buscaIdTS(lexema);
 					if(pos < 0){
-						pos = ControladorTS.insertarEnTS(lexema);
+						pos = ControladorTS.insertaIdTS(lexema);
 					}
 					token = new Identificador(ControladorTS.nombreTablaActual(),pos);
 				}

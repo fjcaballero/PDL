@@ -193,7 +193,7 @@ public class AnalizadorSintactico {
 					resultado = -1;
 				}
 				else{
-					String tipo = regla.aplicar(numRegla, pilaSimbolos);
+//					String tipo = regla.aplicar(numRegla, pilaSimbolos);
 					for(int i=0; i<regla.nElementosDer; i++){
 						pilaEstados.pop();
 //						pilaSimbolos.pop();
