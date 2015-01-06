@@ -1,10 +1,18 @@
 package global.tabla;
 
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 public class TablaSimbolos {
 	private String nombreTabla;
-	private static int n_entradas = 1;
+	private int n_entradas = 1;
 	private HashMap<String,Integer> indice;
 	private HashMap<Integer,EntradaTS> entradas;
 	
@@ -34,11 +42,11 @@ public class TablaSimbolos {
      * @param lexema
      * @return Posición del identificador en la tabla. Devuelve -1 si no se ha insertado.
      */
-    public int insertarTS(EntradaTS tipoEntrada, String lexema){
+    public int insertarTS(String lexema){
         int pos = -1;
         if(!indice.containsKey(lexema)){
         	indice.put(lexema, n_entradas);
-        	entradas.put(n_entradas, tipoEntrada);
+        	entradas.put(n_entradas, new EntradaTS(n_entradas));
         	pos = n_entradas;
             n_entradas++;
         }
@@ -47,6 +55,34 @@ public class TablaSimbolos {
 
 	public String getNombreTabla() {
 		return nombreTabla;
+	}
+	
+	public void printTabla(){
+		PrintWriter writer;
+		try {
+			if(!this.nombreTabla.equals("Global")){
+				writer = new PrintWriter(new BufferedWriter(new FileWriter("resources\\tabla_simbolos.txt", true)));
+			}
+			else{
+				writer = new PrintWriter("resources\\tabla_simbolos.txt","UTF-8");
+			}
+			writer.println("Tabla de símbolos: " +this.nombreTabla);
+			writer.println("+ POS +     LEXEMA     +     TIPO      +  DESP   +    NUMPARAM    +    TIPODEV");
+			writer.println("+-----+----------------+---------------+---------+----------------+-----------------");
+			Iterator<Entry<Integer, EntradaTS>> it = entradas.entrySet().iterator();
+			while(it.hasNext()){
+				Entry<Integer,EntradaTS> entrada = it.next();
+				writer.println(entrada.getValue().aString());
+			}
+			writer.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
     
 }
