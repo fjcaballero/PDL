@@ -1,34 +1,34 @@
-	PROGRAMA0 -> PROGRAMA  
+	PROGRAMA0 -> PROGRAMA  { if (PROGRAMA.tipo = "ok") then SIN ERRORES; else ERROR }
 	
-	PROGRAMA -> BLOQUE  
-	PROGRAMA -> FUNCION
-	PROGRAMA -> BLOQUE  SALTO2  PROGRAMA  
-	PROGRAMA -> FUNCION  SALTO2  PROGRAMA  
-	PROGRAMA -> lambda
+	PROGRAMA -> BLOQUE  { PROGRAMA.tipo = BLOQUE.tipo }
+	PROGRAMA -> FUNCION { PROGRAMA.tipo = FUNCION.tipo }
+	PROGRAMA -> BLOQUE  SALTO2  PROGRAMA  { if(BLOQUE.tipo = "ok") then PROGRAMA.tipo = PROGRAMA1.tipo; else PROGRAMA.tipo = "error" }
+	PROGRAMA -> FUNCION  SALTO2  PROGRAMA  { if(FUNCION.tipo = "ok") then PROGRAMA.tipo = PROGRAMA1.tipo; else PROGRAMA.tipo = "error" }
+	PROGRAMA -> lambda { PROGRAMA.tipo = "ok" }
 
-	BLOQUE -> var  id  
-	BLOQUE -> SENTENCIA
-	BLOQUE -> if  abrePar  EXPRESION  cierraPar  SENTENCIA  
-	BLOQUE -> if  abrePar  EXPRESION  cierraPar  SALTO  abreLlave  SALTO2  CUERPO  cierraLlave
-	BLOQUE -> switch  abrePar  EXPRESION  cierraPar  SALTO  abreLlave  SALTO2  CASE  cierraLlave
+	BLOQUE -> var  id  { BLOQUE.tipo = "ok" }
+	BLOQUE -> SENTENCIA { BLOQUE.tipo = SENTENCIA.tipo }
+	BLOQUE -> if  abrePar  EXPRESION  cierraPar  SENTENCIA  { if(EXPRESION.tipo = "entero/logico") then BLOQUE.tipo = SENTENCIA.tipo; else BLOQUE.tipo = "error" }
+	BLOQUE -> if  abrePar  EXPRESION  cierraPar  SALTO  abreLlave  SALTO2  CUERPO  cierraLlave { if(EXPRESION.tipo = "entero/logico") then BLOQUE.tipo = CUERPO.tipo; else BLOQUE.tipo = "error" }
+	BLOQUE -> switch  abrePar  EXPRESION  cierraPar  SALTO  abreLlave  SALTO2  CASE  cierraLlave { if(EXPRESION.tipo = "entero/logico") then BLOQUE.tipo = CASE.tipo; else BLOQUE.tipo = "error" }
 
-	CASE -> default  dosPuntos SALTO CUERPO   
-	CASE -> case  EXPRESION  dosPuntos  SALTO CUERPO  CASE2  
-	CASE2 -> CASE  
-	CASE2 -> break  SALTO2  CASE  
+	CASE -> default  dosPuntos SALTO CUERPO   { CASE.tipo = CUERPO.tipo }
+	CASE -> case  EXPRESION  dosPuntos  SALTO CUERPO  CASE2  { if(EXPRESION.tipo = "entero/logico" && CUERPO.tipo = "ok" && CASE2.tipo="ok") then CASE.tipo = "ok"; else CASE.tipo = "error" }
+	CASE2 -> CASE  { CASE2.tipo = CASE.tipo }
+	CASE2 -> break  SALTO2  CASE  { CASE2.tipo = CASE.tipo }
 
 	FUNCION -> function  id  abrePar  ARGUMENTOS  cierraPar SALTO abreLlave  SALTO2  CUERPO cierraLlave  
 
-	SENTENCIA -> id  igual  EXPRESION  
-	SENTENCIA -> id  masIgual  EXPRESION  
-	SENTENCIA -> id  menosIgual  EXPRESION  
-	SENTENCIA -> id  abrePar  LLAMADAFUN  cierraPar  
+	SENTENCIA -> id  igual  EXPRESION  {id.tipo = EXPRESION.tipo, SENTENCIA.tipo = "ok" }
+	SENTENCIA -> id  masIgual  EXPRESION  { if (id.tipo = "entero/logico" && EXPRESION.tipo = "entero/logico") then SENTENCIA.tipo = "ok"; else SENTENCIA.tipo = "error" }
+	SENTENCIA -> id  menosIgual  EXPRESION  { if (id.tipo = "entero/logico" && EXPRESION.tipo = "entero/logico") then SENTENCIA.tipo = "ok"; else SENTENCIA.tipo = "error" }
+	SENTENCIA -> id  abrePar  LLAMADAFUN  cierraPar  { SENTENCIA.tipo = LLAMADAFUN.tipo }
 	SENTENCIA -> document  punto  write  abrePar  EXPRESION  cierraPar  
-	SENTENCIA -> prompt  abrePar  id  cierraPar  
-	SENTENCIA -> return  RETURNVALUE  
+	SENTENCIA -> prompt  abrePar  id  cierraPar  { SENTENCIA.tipo = "ok" }
+	SENTENCIA -> return  RETURNVALUE  { if(RETURNVALUE.tipo != "ok", "error", "vacio") then TSG.funcion.val_dev = RETURNVALUE.tipo, SENTENCIA.tipo = "ok"; else SENTENCIA.tipo = RETURNVALUE.tipo}
 
-	CUERPO -> BLOQUE  SALTO2  CUERPO  
-	CUERPO -> lambda
+	CUERPO -> BLOQUE  SALTO2  CUERPO  { if (CUERPO1.tipo = "ok" && BLOQUE.tipo = "ok") then CUERPO.tipo = "ok" }
+	CUERPO -> lambda { CUERPO.tipo = "ok" }
 
 	SALTO -> sl SALTO
 	SALTO -> lambda
