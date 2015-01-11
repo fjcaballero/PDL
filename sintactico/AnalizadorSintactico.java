@@ -1,5 +1,7 @@
 package sintactico;
 
+import global.tabla.ControladorTS;
+import global.token.Identificador;
 import global.token.Token;
 
 import java.io.BufferedReader;
@@ -174,7 +176,12 @@ public class AnalizadorSintactico {
 		if(accion != null){
 			System.out.println("Accion: "+ accion);
 			if(accion.substring(0,1).equals("d")){//Desplazar
-//				pilaSimbolos.push(new Atributo(tokenEntrada.tipo(), null));
+				String tipo = "-";
+				if(tokenEntrada.tipo().equals("id")){
+					String lexema = ControladorTS.getLexema(((Identificador) tokenEntrada).getPos(), ((Identificador) tokenEntrada).getTabla());
+					tipo=ControladorTS.buscaTipoTS(lexema);
+				}
+				pilaSimbolos.push(new Atributo(tokenEntrada.tipo(), tipo));
 				pilaEstados.push(accion.substring(1,accion.length()).trim());
 				tokenEntrada = anLex.leerToken();
 				
@@ -188,19 +195,19 @@ public class AnalizadorSintactico {
 				parse.add(numRegla);
 				Regla regla = listaReglas.get(numRegla-1);
 				
-				if(pilaEstados.size() < regla.nElementosDer &&
+				if(pilaEstados.size() < regla.nElementosDer ||
 						pilaSimbolos.size() < regla.nElementosDer){
 					resultado = -1;
 				}
 				else{
-//					String tipo = regla.aplicar(numRegla, pilaSimbolos);
+					String tipo = Regla.ejecutarAccion(numRegla, pilaSimbolos);
 					for(int i=0; i<regla.nElementosDer; i++){
 						pilaEstados.pop();
-//						pilaSimbolos.pop();
+						pilaSimbolos.pop();
 					}
 					estado = buscarTabla(pilaEstados.peek(), regla.parteIzq, tablaGoTo);
 					pilaEstados.push(estado);
-//					pilaSimbolos.push(new Atributo(regla.parteIzq,tipo));
+					pilaSimbolos.push(new Atributo(regla.parteIzq,tipo));
 					System.out.println("GOTO: " + estado);
 					
 				}

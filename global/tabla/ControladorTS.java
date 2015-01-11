@@ -130,6 +130,19 @@ public class ControladorTS {
 	public static Stack<TablaSimbolos> getPilaTablas() {
 		return pilaTablas;
 	}
+	
+	public static String getLexema(int pos, String nombreTabla){
+		String resultado = "";
+		boolean encontrado = false;
+		TablaSimbolos tabla;
+		for(int i=0; i < pilaTablas.size() && !encontrado; i++){
+			tabla = pilaTablas.get(i);
+			if(tabla.getNombreTabla().equals(nombreTabla)){
+				resultado = tabla.buscaLexemaTS(pos);
+			}
+		}
+		return resultado;
+	}
     
     
     

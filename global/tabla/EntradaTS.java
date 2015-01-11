@@ -3,7 +3,7 @@ package global.tabla;
 public class EntradaTS {
 	private int pos;
 	private String lexema;
-	private String tipo;
+	private String tipo;//entero/logico, cadena, funcion
 	private String desp;
 	private int numParam;
 	private String tipoDev;
