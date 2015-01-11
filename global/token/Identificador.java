@@ -18,5 +18,13 @@ public class Identificador implements Token {
 	public String tipo() {
 		return "id";
 	}
+	
+	public int getPos(){
+		return posicion;
+	}
+	
+	public String getTabla(){
+		return tabla;
+	}
 
 }

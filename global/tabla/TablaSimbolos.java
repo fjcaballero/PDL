@@ -37,6 +37,16 @@ public class TablaSimbolos {
         return pos;
     }
     
+    public String buscaLexemaTS(int pos){
+        String lex = null;
+        if(!entradas.isEmpty()){
+            if(entradas.containsKey(pos)){
+                lex = entradas.get(pos).getLexema();
+            }
+        }
+        return lex;
+    }
+    
     public String buscaTipoTS(String lexema){
     	String tipo = "-";
     	if(!indice.isEmpty()){

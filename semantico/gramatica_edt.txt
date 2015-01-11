@@ -1,4 +1,6 @@
-	PROGRAMA0 -> PROGRAMA  { if (PROGRAMA.tipo = "ok") then SIN ERRORES; else ERROR }
+	PROGRAMA0 -> PROGRAMAS  { if (PROGRAMAS.tipo = "ok") then SIN ERRORES; else ERROR }
+	
+	PROGRAMAS -> SALTO PROGRAMA { PROGRAMAS.tipo = PROGRAMA.tipo }
 	
 	PROGRAMA -> BLOQUE  { PROGRAMA.tipo = BLOQUE.tipo }
 	PROGRAMA -> FUNCION { PROGRAMA.tipo = FUNCION.tipo }
@@ -22,7 +24,7 @@
 	SENTENCIA -> id  igual  EXPRESION  {id.tipo = EXPRESION.tipo, SENTENCIA.tipo = "ok" }
 	SENTENCIA -> id  masIgual  EXPRESION  { if (id.tipo = "entero/logico" && EXPRESION.tipo = "entero/logico") then SENTENCIA.tipo = "ok"; else SENTENCIA.tipo = "error" }
 	SENTENCIA -> id  menosIgual  EXPRESION  { if (id.tipo = "entero/logico" && EXPRESION.tipo = "entero/logico") then SENTENCIA.tipo = "ok"; else SENTENCIA.tipo = "error" }
-	SENTENCIA -> id  abrePar  LLAMADAFUN  cierraPar  { SENTENCIA.tipo = LLAMADAFUN.tipo }
+	SENTENCIA -> id  abrePar  LLAMADAFUN  cierraPar  { if(id.tipo = "funcion")then SENTENCIA.tipo = LLAMADAFUN.tipo; else SENTENCIA.tipo = "error" }
 	SENTENCIA -> document  punto  write  abrePar  EXPRESION  cierraPar  
 	SENTENCIA -> prompt  abrePar  id  cierraPar  { SENTENCIA.tipo = "ok" }
 	SENTENCIA -> return  RETURNVALUE  { if(RETURNVALUE.tipo != "ok", "error", "vacio") then TSG.funcion.val_dev = RETURNVALUE.tipo, SENTENCIA.tipo = "ok"; else SENTENCIA.tipo = RETURNVALUE.tipo}
