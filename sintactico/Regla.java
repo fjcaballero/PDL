@@ -22,7 +22,7 @@ public class Regla {
 	
 	public static String ejecutarAccion(int numRegla, Stack<Atributo> pilaSimbolos){
 		String tipo = "-";
-		Atributo programas, programa, bloque, funcion, sentencia, expresion;
+		Atributo programas, programa, bloque, funcion, sentencia, expresion, cuerpo, caso, case2, id, llamadaFun;
 		switch(numRegla){
 			case 1://PROGRAMA0 -> PROGRAMAS
 				//{ if (PROGRAMAS.tipo = "ok") then SIN ERRORES; else ERROR }
@@ -81,18 +81,80 @@ public class Regla {
 				else tipo = "error";
 				break;
 			case 11://BLOQUE -> if  abrePar  EXPRESION  cierraPar  SALTO  abreLlave  SALTO2  CUERPO  cierraLlave
+				//{ if(EXPRESION.tipo = "entero/logico") then BLOQUE.tipo = CUERPO.tipo; else BLOQUE.tipo = "error" }
+				cuerpo = pilaSimbolos.get(pilaSimbolos.size()-1);
+				expresion = pilaSimbolos.get(pilaSimbolos.size()-6);
+				if(expresion.getTipo().equals("entero/logico"))tipo = cuerpo.getTipo();
+				else tipo = "error";
+				break;
 			case 12://BLOQUE -> switch  abrePar  EXPRESION  cierraPar  SALTO  abreLlave  SALTO2  CASE  cierraLlave
+				//{ if(EXPRESION.tipo = "entero/logico") then BLOQUE.tipo = CASE.tipo; else BLOQUE.tipo = "error" }
+				caso = pilaSimbolos.get(pilaSimbolos.size()-1);
+				expresion = pilaSimbolos.get(pilaSimbolos.size()-6);
+				if(expresion.getTipo().equals("entero/logico"))tipo = caso.getTipo();
+				else tipo = "error";
+				break;
 			case 13://CASE -> default  dosPuntos SALTO CUERPO
+				//{ CASE.tipo = CUERPO.tipo }
+				cuerpo = pilaSimbolos.peek();
+				tipo = cuerpo.getTipo();
+				break;
 			case 14://CASE -> case  EXPRESION  dosPuntos  SALTO CUERPO  CASE2
+				//{ if(EXPRESION.tipo = "entero/logico" && CUERPO.tipo = "ok" && CASE2.tipo="ok") then CASE.tipo = "ok"; else CASE.tipo = "error" }
+				case2 = pilaSimbolos.peek();
+				cuerpo = pilaSimbolos.get(pilaSimbolos.size()-1);
+				expresion = pilaSimbolos.get(pilaSimbolos.size()-4);
+				if(expresion.getTipo().equals("entero/logico") && cuerpo.getTipo().equals("ok") && case2.getTipo().equals("ok"))tipo = "ok";
+				else tipo = "error";
+				break;
 			case 15://CASE2 -> CASE
+				//{ CASE2.tipo = CASE.tipo }
+				caso = pilaSimbolos.peek();
+				tipo = caso.getTipo();
+				break;
 			case 16://CASE2 -> break  SALTO2  CASE
+				//{ CASE2.tipo = CASE.tipo }
+				caso = pilaSimbolos.peek();
+				tipo = caso.getTipo();
+				break;
 			case 17://FUNCION -> function  id  abrePar  ARGUMENTOS  cierraPar SALTO abreLlave  SALTO2  CUERPO cierraLlave
+				/**
+				 * TODO 
+				 * */ 
 			case 18://SENTENCIA -> id  igual  EXPRESION
+				//{id.tipo = EXPRESION.tipo, SENTENCIA.tipo = "ok" }
+				/**
+				 * TODO
+				 */
 			case 19://SENTENCIA -> id  masIgual  EXPRESION
+				//{ if (id.tipo = "entero/logico" && EXPRESION.tipo = "entero/logico") then SENTENCIA.tipo = "ok"; else SENTENCIA.tipo = "error" }
+				expresion = pilaSimbolos.peek();
+				id = pilaSimbolos.get(pilaSimbolos.size()-2);
+				if(id.getTipo().equals("entero/logico") && expresion.getTipo().equals("entero/logico"))tipo = "ok";
+				else tipo = "error";
+				break;
 			case 20://SENTENCIA -> id  menosIgual  EXPRESION
+				//{ if (id.tipo = "entero/logico" && EXPRESION.tipo = "entero/logico") then SENTENCIA.tipo = "ok"; else SENTENCIA.tipo = "error" }
+				expresion = pilaSimbolos.peek();
+				id = pilaSimbolos.get(pilaSimbolos.size()-2);
+				if(id.getTipo().equals("entero/logico") && expresion.getTipo().equals("entero/logico"))tipo = "ok";
+				else tipo = "error";
+				break;
 			case 21://SENTENCIA -> id  abrePar  LLAMADAFUN  cierraPar
+				//{ if(id.tipo = "funcion")then SENTENCIA.tipo = LLAMADAFUN.tipo; else SENTENCIA.tipo = "error" }
+				llamadaFun = pilaSimbolos.get(pilaSimbolos.size()-1);
+				id = pilaSimbolos.get(pilaSimbolos.size()-3);
+				if(id.getTipo().equals("funcion"))tipo = llamadaFun.getTipo();
+				else tipo = "error";
+				break;
 			case 22://SENTENCIA -> document  punto  write  abrePar  EXPRESION  cierraPar
+				/**
+				 * TODO
+				 */
 			case 23://SENTENCIA -> prompt  abrePar  id  cierraPar
+				//{ SENTENCIA.tipo = "ok" }
+				tipo = "ok";
+				break;
 			case 24://SENTENCIA -> return  RETURNVALUE
 			case 25://CUERPO -> BLOQUE  SALTO2  CUERPO
 			case 26://CUERPO -> lambda
