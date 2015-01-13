@@ -183,6 +183,7 @@ public class Regla {
 					tipo = "ok";
 				}
 				else tipo = "error";
+				break;
 				
 			case 25://CUERPO -> BLOQUE  SALTO2  CUERPO
 				//{ if (CUERPO1.tipo = "ok" && BLOQUE.tipo = "ok") then CUERPO.tipo = "ok"; else CUERPO.tipo = "error"}
