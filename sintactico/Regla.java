@@ -24,7 +24,7 @@ public class Regla {
 	public static String ejecutarAccion(int numRegla, Stack<Atributo> pilaSimbolos){
 		String tipo = "-";
 
-		Atributo programas, programa, bloque, funcion, sentencia, expresion, cuerpo, caso, case2, id, llamadaFun, argumentos,
+		Atributo programas, programa, bloque, funcion, sentencia, expresion, cuerpo, caso, case2, id, llamadaFun, llamadaFun21, argumentos,
 		returnValue, argumentos2, argumentos21, aritmetica, simple;
 		switch(numRegla){
 			case 1://PROGRAMA0 -> PROGRAMAS
@@ -176,15 +176,21 @@ public class Regla {
 				else tipo = "error";
 				break;
 			case 24://SENTENCIA -> return  RETURNVALUE
-				//{ if(RETURNVALUE.tipo != "ok", "error", "vacio") then TSG.funcion.val_dev = RETURNVALUE.tipo, SENTENCIA.tipo = "ok"; else SENTENCIA.tipo = RETURNVALUE.tipo}
-				/**
-				 * TODO
-				 */
+				//{ if(RETURNVALUE.tipo == "entero/logico", "cadena", "vacio") then TSG.funcion.val_dev = RETURNVALUE.tipo, SENTENCIA.tipo = "ok"; else SENTENCIA.tipo = RETURNVALUE.tipo}
+				returnValue = pilaSimbolos.peek();
+				if(returnValue.getTipo().equals("entero/logico") || returnValue.getTipo().equals("cadena") || returnValue.getTipo().equals("vacio")){
+					ControladorTS.insertaTipoDevTS(ControladorTS.getFuncion(), returnValue.getTipo());
+					tipo = "ok";
+				}
+				else tipo = "error";
+				break;
+				
 			case 25://CUERPO -> BLOQUE  SALTO2  CUERPO
-				//{ if (CUERPO1.tipo = "ok" && BLOQUE.tipo = "ok") then CUERPO.tipo = "ok" }
+				//{ if (CUERPO1.tipo = "ok" && BLOQUE.tipo = "ok") then CUERPO.tipo = "ok"; else CUERPO.tipo = "error"}
 				cuerpo = pilaSimbolos.peek();
 				bloque = pilaSimbolos.get(pilaSimbolos.size()-2);
 				if(cuerpo.getTipo().equals("ok") && bloque.getTipo().equals("ok")) tipo = "ok";
+				else tipo = "error";
 				break;
 			case 26://CUERPO -> lambda
 				//{ CUERPO.tipo = "ok" }
@@ -202,23 +208,27 @@ public class Regla {
 				tipo = expresion.getTipo();
 				break;
 			case 31://RETURNVALUE -> lambda
-				//{ RETURNVALUE.tipo = "ok" }
-				tipo = "ok";
+				//{ RETURNVALUE.tipo = "vacio" }
+				tipo = "vacio";
 				break;
 			case 32://LLAMADAFUN -> EXPRESION  LLAMADAFUN2
-				//{ if(EXPRESION.tipo = "ok" && LLAMADAFUN2.tipo="ok") then LLAMADAFUN.tipo = "ok" }
+				//{ if(EXPRESION.tipo = "ok" && LLAMADAFUN2.tipo="ok") then LLAMADAFUN.tipo = "ok"; else LLAMADAFUN.tipo = "error" }
 				llamadaFun = pilaSimbolos.peek();
-				expresion = pilaSimbolos.get(pilaSimbolos.size());
+				expresion = pilaSimbolos.get(pilaSimbolos.size()-1);
 				if(expresion.getTipo().equals("ok") && llamadaFun.getTipo().equals("ok")) tipo = "ok";
+				else tipo = "error";
 				break;
 			case 33://LLAMADAFUN -> lambda
 				//{ LLAMADAFUN.tipo = "ok" }
 				tipo = "ok";
 				break;
 			case 34://LLAMADAFUN2 -> coma  EXPRESION  LLAMADAFUN2 
-				//{ LLAMADAFUN2.tipo = LLAMADAFUN21.tipo }
-				llamadaFun = pilaSimbolos.peek();
-				tipo = llamadaFun.getTipo();
+				//{ if(EXPRESION.tipo != "error","vacio")then LLAMADAFUN2.tipo = LLAMADAFUN21.tipo; else LLAMADAFUN2.tipo = "error"}
+				llamadaFun21 = pilaSimbolos.peek();
+				expresion = pilaSimbolos.get(pilaSimbolos.size()-1);
+				if(!expresion.getTipo().equals("error") && !expresion.getTipo().equals("vacio"))tipo = llamadaFun21.getTipo();
+				else tipo = "error";
+				
 				break;
 			case 35://LLAMADAFUN2 -> lambda
 				//{ LLAMADAFUN2.tipo = "ok" }
@@ -243,14 +253,14 @@ public class Regla {
 				tipo = "ok";
 				break;
 			case 40://EXPRESION -> EXPRESION  menor  ARITMETICA 
-				//{ if(EXPRESION1.tipo = entero/logico && ARITMETICA.tipo = entero/logico) then ARITMETICA.tipo = entero/logico else ARITMETICA.tipo = "error" }
+				//{ if(EXPRESION1.tipo = entero/logico && ARITMETICA.tipo = entero/logico) then EXPRESION.tipo = entero/logico else EXPRESION.tipo = "error" }
 				expresion = pilaSimbolos.get(pilaSimbolos.size()-2);
 				aritmetica = pilaSimbolos.peek();
 				if(expresion.getTipo().equals("entero/logico") && aritmetica.getTipo().equals("entero/logico")) tipo = "entero/logico";
 				else tipo = "error";
 				break;
 			case 41://EXPRESION -> EXPRESION  menorIgual  ARITMETICA
-				//{ if(EXPRESION1.tipo = entero/logico && ARITMETICA.tipo = entero/logico) then ARITMETICA.tipo = entero/logico else ARITMETICA.tipo = "error" }
+				//{ if(EXPRESION1.tipo = entero/logico && ARITMETICA.tipo = entero/logico) then EXPRESION.tipo = entero/logico else EXPRESION.tipo = "error" }
 				expresion = pilaSimbolos.get(pilaSimbolos.size()-2);
 				aritmetica = pilaSimbolos.peek();
 				if(expresion.getTipo().equals("entero/logico") && aritmetica.getTipo().equals("entero/logico")) tipo = "entero/logico";
@@ -279,10 +289,12 @@ public class Regla {
 				//{ ARITMETICA.tipo = SIMPLE.tipo }
 				simple = pilaSimbolos.peek();
 				tipo = simple.getTipo();
+				break;
 			case 46://SIMPLE -> negacion  SIMPLE  
-				//{ if(SIMPLE1.tipo = entero/logico) then SIMPLE.tipo = entero/logico }
+				//{ if(SIMPLE1.tipo = entero/logico) then SIMPLE.tipo = entero/logico; else SIMPLE.tipo = "error" }
 				simple = pilaSimbolos.peek();
 				if(simple.getTipo().equals("entero/logico")) tipo = "entero/logico";
+				else tipo = "error";
 				break;
 			case 47://SIMPLE -> abrePar  EXPRESION  cierraPar
 				//{ SIMPLE.tipo = EXPRESION.tipo }
@@ -291,9 +303,9 @@ public class Regla {
 				break;
 			case 48://SIMPLE -> id 
 				//{ SIMPLE.tipo = buscaTipoTS(id.ent) }
-				/**
-				 * TODO
-				 */
+				id = pilaSimbolos.peek();
+				tipo = ControladorTS.buscaTipoTS(id.getLexema());
+				break;
 			case 49://SIMPLE -> num 
 				//{ SIMPLE.tipo = entero/logico }
 				tipo = "entero/logico";
@@ -303,10 +315,14 @@ public class Regla {
 				tipo = "cadena";
 				break;
 			case 51://SIMPLE -> id  abrePar  LLAMADAFUN  cierraPar 
-				//{ if(buscaTipoTS(id.ent)) = "X->T" && LLAMADAFUN.tipo = "X" then SIMPLE.tipo = "T" else SIMPLE.tipo = "error"}
-				/**
-				 * TODO 
-				 */
+				//{ if(LLAMADAFUN.tipo = "ok" && id.tipo = "funcion") then SIMPLE.tipo = id.tipoDevuelto; else SIMPLE.tipo = "error"}
+				llamadaFun = pilaSimbolos.get(pilaSimbolos.size()-1);
+				id = pilaSimbolos.get(pilaSimbolos.size()-3);
+				if(llamadaFun.getTipo().equals("ok") && ControladorTS.buscaTipoTS(id.getLexema()).equals("funcion")){
+					tipo = ControladorTS.buscaTipoDevTS(id.getLexema());
+				}
+				else tipo = "error";
+				break;
 			default:
 				System.out.println("Error al ejecutar Accion Semantica, numero de regla incorrecto");
 				break;

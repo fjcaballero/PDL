@@ -29,7 +29,7 @@
 	SENTENCIA -> prompt  abrePar  id  cierraPar  { if (id.tipo!=funcion)then SENTENCIA.tipo = "ok"; else SENTENCIA.tipo = "error" }
 	SENTENCIA -> return  RETURNVALUE  { if(RETURNVALUE.tipo != "ok", "error", "vacio") then TSG.funcion.val_dev = RETURNVALUE.tipo, SENTENCIA.tipo = "ok"; else SENTENCIA.tipo = RETURNVALUE.tipo}
 
-	CUERPO -> BLOQUE  SALTO2  CUERPO  { if (CUERPO1.tipo = "ok" && BLOQUE.tipo = "ok") then CUERPO.tipo = "ok" }
+	CUERPO -> BLOQUE  SALTO2  CUERPO  { if (CUERPO1.tipo = "ok" && BLOQUE.tipo = "ok") then CUERPO.tipo = "ok"; else CUERPO.tipo = "error"}
 	CUERPO -> lambda { CUERPO.tipo = "ok" }
 
 	SALTO -> sl SALTO
@@ -38,12 +38,12 @@
 	SALTO2 -> sl SALTO
 
 	RETURNVALUE -> EXPRESION  { RETURNVALUE.tipo = EXPRESION.tipo }
-	RETURNVALUE -> lambda { RETURNVALUE.tipo = "ok" }
+	RETURNVALUE -> lambda { RETURNVALUE.tipo = "vacio" }
 
-	LLAMADAFUN -> EXPRESION  LLAMADAFUN2 { if(EXPRESION.tipo = "ok" && LLAMADAFUN2.tipo="ok") then LLAMADAFUN.tipo = "ok" }
+	LLAMADAFUN -> EXPRESION  LLAMADAFUN2 { if(EXPRESION.tipo = "ok" && LLAMADAFUN2.tipo="ok") then LLAMADAFUN.tipo = "ok"; else LLAMADAFUN.tipo = "error"}
 	LLAMADAFUN -> lambda { LLAMADAFUN.tipo = "ok" }
 
-	LLAMADAFUN2 -> coma  EXPRESION  LLAMADAFUN2 { LLAMADAFUN2.tipo = LLAMADAFUN21.tipo }
+	LLAMADAFUN2 -> coma  EXPRESION  LLAMADAFUN2 { if(EXPRESION.tipo != "error","vacio")then LLAMADAFUN2.tipo = LLAMADAFUN21.tipo; else LLAMADAFUN2.tipo = "error"}
 	LLAMADAFUN2 -> lambda { LLAMADAFUN2.tipo = "ok" }
 
 	ARGUMENTOS -> id  ARGUMENTOS2 { ARGUMENTOS.tipo = ARGUMENTOS2.tipo }
@@ -59,9 +59,9 @@
 	ARITMETICA -> ARITMETICA1  menos  SIMPLE  { if(ARITMETICA1.tipo = entero/logico && SIMPLE.tipo = entero/logico) then ARITMETICA.tipo = entero/logico else ARITMETICA.tipo = "error" }
 	ARITMETICA -> SIMPLE  { ARITMETICA.tipo = SIMPLE.tipo }
 
-	SIMPLE -> negacion  SIMPLE1 { if(SIMPLE1.tipo = entero/logico) then SIMPLE.tipo = entero/logico } 
+	SIMPLE -> negacion  SIMPLE1 { if(SIMPLE1.tipo = entero/logico) then SIMPLE.tipo = entero/logico; else SIMPLE.tipo = "error" } 
 	SIMPLE -> abrePar  EXPRESION  cierraPar  { SIMPLE.tipo = EXPRESION.tipo }
 	SIMPLE -> id { SIMPLE.tipo = buscaTipoTS(id.ent) }
 	SIMPLE -> num  { SIMPLE.tipo = entero/logico }
 	SIMPLE -> cad  { SIMPLE.tipo = cadena }
-	SIMPLE -> id  abrePar  LLAMADAFUN  cierraPar  { if(buscaTipoTS(id.ent)) = "X->T" && LLAMADAFUN.tipo = "X" then SIMPLE.tipo = "T" else SIMPLE.tipo = "error"}
+	SIMPLE -> id  abrePar  LLAMADAFUN  cierraPar  { if(LLAMADAFUN.tipo = "ok" && id.tipo = "funcion") then SIMPLE.tipo = id.tipoDevuelto; else SIMPLE.tipo = "error"}
