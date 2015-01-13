@@ -227,10 +227,26 @@ public class AnalizadorLexico {
 				 */
 				else{
 					int pos = ControladorTS.buscaIdTS(lexema);
-					if(pos < 0){
-						pos = ControladorTS.insertaIdTS(lexema);
+					if(ControladorTS.getFlagDU()){
+						if(pos==-1){
+							pos = ControladorTS.insertaIdTS(lexema);
+							ControladorTS.insertaTipoTS(lexema, "funcion");
+						}
+						else{
+							//ERROR
+						}
+						token = new Identificador(ControladorTS.nombreTablaActual(),pos);
+						ControladorTS.crearTS(lexema); // crear TS para la funcion
+						ControladorTS.flagUso();
 					}
-					token = new Identificador(ControladorTS.nombreTablaActual(),pos);
+					else{//USO
+						if(pos == -1){
+							pos = ControladorTS.insertaIdTS(lexema);
+						}
+						token = new Identificador(ControladorTS.nombreTablaActual(),pos);
+					}
+					
+					
 				}
 				leido = true;
 				break;

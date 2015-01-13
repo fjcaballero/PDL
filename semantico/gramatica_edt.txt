@@ -19,14 +19,14 @@
 	CASE2 -> CASE  { CASE2.tipo = CASE.tipo }
 	CASE2 -> break  SALTO2  CASE  { CASE2.tipo = CASE.tipo }
 
-	FUNCION -> function  id  abrePar  ARGUMENTOS  cierraPar SALTO abreLlave  SALTO2  CUERPO cierraLlave  
+	FUNCION -> function  id  abrePar  ARGUMENTOS  cierraPar SALTO abreLlave  SALTO2  CUERPO cierraLlave //{ if(ARGUMENTOS.tipo = "ok") then FUNCION.tipo = CUERPO.tipo; else FUNCION.tipo = "error"; Eliminar TS Local} 
 
-	SENTENCIA -> id  igual  EXPRESION  {id.tipo = EXPRESION.tipo, SENTENCIA.tipo = "ok" }
+	SENTENCIA -> id  igual  EXPRESION  {if(id.tipo!=funcion)then id.tipo = EXPRESION.tipo, SENTENCIA.tipo = "ok"; else SENTENCIA.tipo="error" }
 	SENTENCIA -> id  masIgual  EXPRESION  { if (id.tipo = "entero/logico" && EXPRESION.tipo = "entero/logico") then SENTENCIA.tipo = "ok"; else SENTENCIA.tipo = "error" }
 	SENTENCIA -> id  menosIgual  EXPRESION  { if (id.tipo = "entero/logico" && EXPRESION.tipo = "entero/logico") then SENTENCIA.tipo = "ok"; else SENTENCIA.tipo = "error" }
 	SENTENCIA -> id  abrePar  LLAMADAFUN  cierraPar  { if(id.tipo = "funcion")then SENTENCIA.tipo = LLAMADAFUN.tipo; else SENTENCIA.tipo = "error" }
-	SENTENCIA -> document  punto  write  abrePar  EXPRESION  cierraPar  
-	SENTENCIA -> prompt  abrePar  id  cierraPar  { SENTENCIA.tipo = "ok" }
+	SENTENCIA -> document  punto  write  abrePar  EXPRESION  cierraPar  { if (EXPRESION.tipo != "error") then SENTENCIA.tipo = "ok"; else SENTENCIA.tipo="error" }
+	SENTENCIA -> prompt  abrePar  id  cierraPar  { if (id.tipo!=funcion)then SENTENCIA.tipo = "ok"; else SENTENCIA.tipo = "error" }
 	SENTENCIA -> return  RETURNVALUE  { if(RETURNVALUE.tipo != "ok", "error", "vacio") then TSG.funcion.val_dev = RETURNVALUE.tipo, SENTENCIA.tipo = "ok"; else SENTENCIA.tipo = RETURNVALUE.tipo}
 
 	CUERPO -> BLOQUE  SALTO2  CUERPO  { if (CUERPO1.tipo = "ok" && BLOQUE.tipo = "ok") then CUERPO.tipo = "ok" }
@@ -46,13 +46,13 @@
 	LLAMADAFUN2 -> coma  EXPRESION  LLAMADAFUN2 { LLAMADAFUN2.tipo = LLAMADAFUN21.tipo }
 	LLAMADAFUN2 -> lambda { LLAMADAFUN2.tipo = "ok" }
 
-	ARGUMENTOS -> id  ARGUMENTOS2 { ARGUMENTOS2.tipo = ARGUMENTOS21.tipo }
+	ARGUMENTOS -> id  ARGUMENTOS2 { ARGUMENTOS.tipo = ARGUMENTOS2.tipo }
 	ARGUMENTOS -> lambda { ARGUMENTOS.tipo = "ok" }
 	ARGUMENTOS2 -> coma  id  ARGUMENTOS21  { ARGUMENTOS2.tipo = ARGUMENTOS21.tipo }
 	ARGUMENTOS2 -> lambda { ARGUMENTOS2.tipo = "ok" }
 
-	EXPRESION -> EXPRESION  menor  ARITMETICA { if(EXPRESION1.tipo = entero/logico && ARITMETICA.tipo = entero/logico) then ARITMETICA.tipo = entero/logico else ARITMETICA.tipo = "error" }
-	EXPRESION -> EXPRESION1  menorIgual  ARITMETICA { if(EXPRESION1.tipo = entero/logico && ARITMETICA.tipo = entero/logico) then ARITMETICA.tipo = entero/logico else ARITMETICA.tipo = "error" }
+	EXPRESION -> EXPRESION  menor  ARITMETICA { if(EXPRESION1.tipo = entero/logico && ARITMETICA.tipo = entero/logico) then EXPRESION.tipo = entero/logico else EXPRESION.tipo = "error" }
+	EXPRESION -> EXPRESION1  menorIgual  ARITMETICA { if(EXPRESION1.tipo = entero/logico && ARITMETICA.tipo = entero/logico) then EXPRESION.tipo = entero/logico else EXPRESION.tipo = "error" }
 	EXPRESION -> ARITMETICA  { EXPRESION.tipo = ARITMETICA.tipo }
 
 	ARITMETICA -> ARITMETICA1  mas  SIMPLE  { if(ARITMETICA1.tipo = entero/logico && SIMPLE.tipo = entero/logico) then ARITMETICA.tipo = entero/logico else ARITMETICA.tipo = "error" }
