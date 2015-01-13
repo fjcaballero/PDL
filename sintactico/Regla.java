@@ -54,14 +54,14 @@ public class Regla {
 			case 5://PROGRAMA -> BLOQUE  SALTO2  PROGRAMA
 				//{ if(BLOQUE.tipo = "ok") then PROGRAMA.tipo = PROGRAMA1.tipo; else PROGRAMA.tipo = "error" }
 				programa = pilaSimbolos.peek();
-				bloque = pilaSimbolos.get(pilaSimbolos.size()-2);
+				bloque = pilaSimbolos.get(pilaSimbolos.size()-3);
 				if(bloque.getTipo().equals("ok"))tipo = programa.getTipo();
 				else tipo = "error";
 				break;
 			case 6://PROGRAMA -> FUNCION  SALTO2  PROGRAMA
 				//{ if(FUNCION.tipo = "ok") then PROGRAMA.tipo = PROGRAMA1.tipo; else PROGRAMA.tipo = "error" }
 				programa = pilaSimbolos.peek();
-				funcion = pilaSimbolos.get(pilaSimbolos.size()-2);
+				funcion = pilaSimbolos.get(pilaSimbolos.size()-3);
 				if(funcion.getTipo().equals("ok"))tipo = programa.getTipo();
 				else tipo = "error";
 				break;
@@ -81,7 +81,7 @@ public class Regla {
 			case 10://BLOQUE -> if  abrePar  EXPRESION  cierraPar  SENTENCIA
 				//{ if(EXPRESION.tipo = "entero/logico") then BLOQUE.tipo = SENTENCIA.tipo; else BLOQUE.tipo = "error" }
 				sentencia = pilaSimbolos.peek();
-				expresion = pilaSimbolos.get(pilaSimbolos.size()-2);
+				expresion = pilaSimbolos.get(pilaSimbolos.size()-3);
 				if(expresion.getTipo().equals("entero/logico"))tipo = sentencia.getTipo();
 				else {
 					tipo = "error";
@@ -90,8 +90,8 @@ public class Regla {
 				break;
 			case 11://BLOQUE -> if  abrePar  EXPRESION  cierraPar  SALTO  abreLlave  SALTO2  CUERPO  cierraLlave
 				//{ if(EXPRESION.tipo = "entero/logico") then BLOQUE.tipo = CUERPO.tipo; else BLOQUE.tipo = "error" }
-				cuerpo = pilaSimbolos.get(pilaSimbolos.size()-1);
-				expresion = pilaSimbolos.get(pilaSimbolos.size()-6);
+				cuerpo = pilaSimbolos.get(pilaSimbolos.size()-2);
+				expresion = pilaSimbolos.get(pilaSimbolos.size()-7);
 				if(expresion.getTipo().equals("entero/logico"))tipo = cuerpo.getTipo();
 				else {
 					tipo = "error";
@@ -100,8 +100,8 @@ public class Regla {
 				break;
 			case 12://BLOQUE -> switch  abrePar  EXPRESION  cierraPar  SALTO  abreLlave  SALTO2  CASE  cierraLlave
 				//{ if(EXPRESION.tipo = "entero/logico") then BLOQUE.tipo = CASE.tipo; else BLOQUE.tipo = "error" }
-				caso = pilaSimbolos.get(pilaSimbolos.size()-1);
-				expresion = pilaSimbolos.get(pilaSimbolos.size()-6);
+				caso = pilaSimbolos.get(pilaSimbolos.size()-2);
+				expresion = pilaSimbolos.get(pilaSimbolos.size()-7);
 				if(expresion.getTipo().equals("entero/logico"))tipo = caso.getTipo();
 				else {
 					tipo = "error";
@@ -116,8 +116,8 @@ public class Regla {
 			case 14://CASE -> case  EXPRESION  dosPuntos  SALTO CUERPO  CASE2
 				//{ if(EXPRESION.tipo = "entero/logico" && CUERPO.tipo = "ok" && CASE2.tipo="ok") then CASE.tipo = "ok"; else CASE.tipo = "error" }
 				case2 = pilaSimbolos.peek();
-				cuerpo = pilaSimbolos.get(pilaSimbolos.size()-1);
-				expresion = pilaSimbolos.get(pilaSimbolos.size()-4);
+				cuerpo = pilaSimbolos.get(pilaSimbolos.size()-2);
+				expresion = pilaSimbolos.get(pilaSimbolos.size()-5);
 				if(expresion.getTipo().equals("entero/logico") && cuerpo.getTipo().equals("ok") && case2.getTipo().equals("ok"))tipo = "ok";
 				else {
 					tipo = "error";
@@ -136,8 +136,8 @@ public class Regla {
 				break;
 			case 17://FUNCION -> function  id  abrePar  ARGUMENTOS  cierraPar SALTO abreLlave  SALTO2  CUERPO cierraLlave
 				//{ if(ARGUMENTOS.tipo = "ok") then FUNCION.tipo = CUERPO.tipo; else FUNCION.tipo = "error"; Eliminar TS Local}
-				cuerpo = pilaSimbolos.get(pilaSimbolos.size()-1);
-				argumentos = pilaSimbolos.get(pilaSimbolos.size()-6);
+				cuerpo = pilaSimbolos.get(pilaSimbolos.size()-2);
+				argumentos = pilaSimbolos.get(pilaSimbolos.size()-7);
 				if(argumentos.getTipo().equals("ok"))tipo = cuerpo.getTipo();
 				else tipo = "error";
 				ControladorTS.eliminarTS();
@@ -145,7 +145,7 @@ public class Regla {
 			case 18://SENTENCIA -> id  igual  EXPRESION
 				//{if(id.tipo!=funcion)then id.tipo = EXPRESION.tipo, SENTENCIA.tipo = "ok"; else SENTENCIA.tipo="error" }
 				expresion = pilaSimbolos.peek();
-				id = pilaSimbolos.get(pilaSimbolos.size()-2);
+				id = pilaSimbolos.get(pilaSimbolos.size()-3);
 				System.out.println("---------------------------------------------------------");
 				System.out.println(pilaSimbolos.indexOf(pilaSimbolos.peek()));
 				System.out.println(pilaSimbolos.size());
@@ -168,7 +168,7 @@ public class Regla {
 			case 19://SENTENCIA -> id  masIgual  EXPRESION
 				//{ if (id.tipo = "entero/logico" && EXPRESION.tipo = "entero/logico") then SENTENCIA.tipo = "ok"; else SENTENCIA.tipo = "error" }
 				expresion = pilaSimbolos.peek();
-				id = pilaSimbolos.get(pilaSimbolos.size()-2);
+				id = pilaSimbolos.get(pilaSimbolos.size()-3);
 				if(id.getTipo().equals("entero/logico") && expresion.getTipo().equals("entero/logico"))tipo = "ok";
 				else {
 					tipo = "error";
@@ -179,7 +179,7 @@ public class Regla {
 			case 20://SENTENCIA -> id  menosIgual  EXPRESION
 				//{ if (id.tipo = "entero/logico" && EXPRESION.tipo = "entero/logico") then SENTENCIA.tipo = "ok"; else SENTENCIA.tipo = "error" }
 				expresion = pilaSimbolos.peek();
-				id = pilaSimbolos.get(pilaSimbolos.size()-2);
+				id = pilaSimbolos.get(pilaSimbolos.size()-3);
 				if(id.getTipo().equals("entero/logico") && expresion.getTipo().equals("entero/logico"))tipo = "ok";
 				else {
 					tipo = "error";
@@ -189,7 +189,7 @@ public class Regla {
 				break;
 			case 21://SENTENCIA -> id  abrePar  LLAMADAFUN  cierraPar
 				//{ if(id.tipo = "funcion")then SENTENCIA.tipo = LLAMADAFUN.tipo; else SENTENCIA.tipo = "error" }
-				llamadaFun = pilaSimbolos.get(pilaSimbolos.size()-1);
+				llamadaFun = pilaSimbolos.get(pilaSimbolos.size()-2);
 				id = pilaSimbolos.get(pilaSimbolos.size()-3);
 				if(id.getTipo().equals("funcion"))tipo = llamadaFun.getTipo();
 				else {
@@ -199,13 +199,13 @@ public class Regla {
 				break;
 			case 22://SENTENCIA -> document  punto  write  abrePar  EXPRESION  cierraPar
 				//{ if (EXPRESION.tipo != "error") then SENTENCIA.tipo = "ok"; else SENTENCIA.tipo="error" }
-				expresion = pilaSimbolos.get(pilaSimbolos.size()-1);
+				expresion = pilaSimbolos.get(pilaSimbolos.size()-2);
 				if(!expresion.getTipo().equals("error"))tipo = "ok";
 				else tipo = "error";
 				break;
 			case 23://SENTENCIA -> prompt  abrePar  id  cierraPar
 				//{ if (id.tipo!=funcion)then SENTENCIA.tipo = "ok"; else SENTENCIA.tipo = "error" }
-				id = pilaSimbolos.get(pilaSimbolos.size()-1);
+				id = pilaSimbolos.get(pilaSimbolos.size()-2);
 				if(!id.getTipo().equals("funcion"))tipo = "ok";
 				else {
 					tipo = "error";
