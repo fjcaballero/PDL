@@ -40,6 +40,8 @@ public class Procesador {
 				System.out.println("Compilación correcta");
 				procesador.listarTokens();
 				procesador.listarParse();
+				procesador.listarErrores();
+				procesador.listarTablas();
 			}
 		while(!ControladorTS.getPilaTablas().isEmpty()){
 			ControladorTS.eliminarTS();
@@ -100,7 +102,13 @@ public class Procesador {
 			e.printStackTrace();
 		}
 	}
-
 	
+	private void listarErrores(){
+		ControladorErrores.printErrors();
+	}
+
+	private void listarTablas(){
+		ControladorTS.printTablas();
+	}
 
 }

@@ -12,6 +12,8 @@ import java.util.Stack;
 public class ControladorTS {
     
     private static Stack<TablaSimbolos> pilaTablas = new Stack<TablaSimbolos>();
+    // pila para almacenar
+    private static Stack<TablaSimbolos> pilaLocales = new Stack<TablaSimbolos>();
     private static ArrayList<String> tablaReservadas = new ArrayList<String>(){{
         add("switch");
         add("case");
@@ -144,6 +146,13 @@ public class ControladorTS {
 		return resultado;
 	}
     
+	public static void printTablas(){
+		//Printear la tabla Global creando/sobreescribiendo el fichero tablasimbolos.txt
+		pilaTablas.peek().printTabla(false);
+		for(int i=pilaLocales.size(); i > 0 ; i--){
+			pilaLocales.get(i-1).printTabla(true);
+		}
+	}
     
     
 }

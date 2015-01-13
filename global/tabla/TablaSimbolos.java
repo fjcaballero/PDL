@@ -154,10 +154,10 @@ public class TablaSimbolos {
 		return nombreTabla;
 	}
 	
-	public void printTabla(){
+	public void printTabla(boolean append){
 		PrintWriter writer;
 		try {
-			writer = new PrintWriter(new BufferedWriter(new FileWriter("resources\\tabla_simbolos.txt", true)));
+			writer = new PrintWriter(new BufferedWriter(new FileWriter("resources\\tabla_simbolos.txt", append)));
 			writer.println("Tabla de símbolos: " +this.nombreTabla);
 			writer.println("+ POS +     LEXEMA     +     TIPO      +  DESP   +    NUMPARAM    +    TIPODEV");
 			writer.println("+-----+----------------+---------------+---------+----------------+-----------------");
