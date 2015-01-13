@@ -25,6 +25,27 @@ public class ControladorTS {
         add("write");
         add("var");
     }};
+    private static boolean flagDU = false;//True = Declaracion, False = Uso
+    private static String funcionActual;
+    
+    public static void setFuncion(String funcion){
+    	funcionActual = funcion;
+    }
+    
+    public static String getFuncion(){
+    	return funcionActual;
+    }
+    
+    public static boolean getFlagDU(){
+    	return flagDU;
+    }
+    
+    public static void flagDeclaracion(){
+    	flagDU = true;
+    }
+    public static void flagUso(){
+    	flagDU = false;
+    }
     
     
     public static boolean esReservada(String palabra){

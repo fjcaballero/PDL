@@ -180,14 +180,17 @@ public class AnalizadorSintactico {
 				if(tokenEntrada.tipo().equals("id")){
 					String lexema = ControladorTS.getLexema(((Identificador) tokenEntrada).getPos(), ((Identificador) tokenEntrada).getTabla());
 					tipo=ControladorTS.buscaTipoTS(lexema);
+					pilaSimbolos.push(new Atributo(tokenEntrada.tipo(), tipo, lexema));
 				}
-				pilaSimbolos.push(new Atributo(tokenEntrada.tipo(), tipo));
+				else {
+					pilaSimbolos.push(new Atributo(tokenEntrada.tipo(), tipo));
+				}
 				pilaEstados.push(accion.substring(1,accion.length()).trim());
 				tokenEntrada = anLex.leerToken();
 				
 				/* Acciones semanticas */
 				if(tokenEntrada.tipo().equals("function")){
-					//cambiar tabla de simbolos actual
+					ControladorTS.flagDeclaracion();
 				}
 			}
 			else if(accion.substring(0,1).equals("r")){//Reducir
