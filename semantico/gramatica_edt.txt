@@ -27,7 +27,7 @@
 	SENTENCIA -> id  abrePar  LLAMADAFUN  cierraPar  { if(id.tipo = "funcion")then SENTENCIA.tipo = LLAMADAFUN.tipo; else SENTENCIA.tipo = "error" }
 	SENTENCIA -> document  punto  write  abrePar  EXPRESION  cierraPar  { if (EXPRESION.tipo != "error") then SENTENCIA.tipo = "ok"; else SENTENCIA.tipo="error" }
 	SENTENCIA -> prompt  abrePar  id  cierraPar  { if (id.tipo!=funcion)then SENTENCIA.tipo = "ok"; else SENTENCIA.tipo = "error" }
-	SENTENCIA -> return  RETURNVALUE  { if(RETURNVALUE.tipo != "ok", "error", "vacio") then TSG.funcion.val_dev = RETURNVALUE.tipo, SENTENCIA.tipo = "ok"; else SENTENCIA.tipo = RETURNVALUE.tipo}
+	SENTENCIA -> return  RETURNVALUE  { if(RETURNVALUE.tipo != "ok", "error", "vacio") then TSG.funcion.val_dev = RETURNVALUE.tipo, SENTENCIA.tipo = "ok"; else SENTENCIA.tipo = "error"}
 
 	CUERPO -> BLOQUE  SALTO2  CUERPO  { if (CUERPO1.tipo = "ok" && BLOQUE.tipo = "ok") then CUERPO.tipo = "ok"; else CUERPO.tipo = "error"}
 	CUERPO -> lambda { CUERPO.tipo = "ok" }
@@ -52,14 +52,14 @@
 	ARGUMENTOS2 -> lambda { ARGUMENTOS2.tipo = "ok" }
 
 	EXPRESION -> EXPRESION  menor  ARITMETICA { if(EXPRESION1.tipo = entero/logico && ARITMETICA.tipo = entero/logico) then EXPRESION.tipo = entero/logico else EXPRESION.tipo = "error" }
-	EXPRESION -> EXPRESION1  menorIgual  ARITMETICA { if(EXPRESION1.tipo = entero/logico && ARITMETICA.tipo = entero/logico) then EXPRESION.tipo = entero/logico else EXPRESION.tipo = "error" }
+	EXPRESION -> EXPRESION  menorIgual  ARITMETICA { if(EXPRESION1.tipo = entero/logico && ARITMETICA.tipo = entero/logico) then EXPRESION.tipo = entero/logico else EXPRESION.tipo = "error" }
 	EXPRESION -> ARITMETICA  { EXPRESION.tipo = ARITMETICA.tipo }
 
-	ARITMETICA -> ARITMETICA1  mas  SIMPLE  { if(ARITMETICA1.tipo = entero/logico && SIMPLE.tipo = entero/logico) then ARITMETICA.tipo = entero/logico else ARITMETICA.tipo = "error" }
-	ARITMETICA -> ARITMETICA1  menos  SIMPLE  { if(ARITMETICA1.tipo = entero/logico && SIMPLE.tipo = entero/logico) then ARITMETICA.tipo = entero/logico else ARITMETICA.tipo = "error" }
+	ARITMETICA -> ARITMETICA  mas  SIMPLE  { if(ARITMETICA1.tipo = entero/logico && SIMPLE.tipo = entero/logico) then ARITMETICA.tipo = entero/logico else ARITMETICA.tipo = "error" }
+	ARITMETICA -> ARITMETICA  menos  SIMPLE  { if(ARITMETICA1.tipo = entero/logico && SIMPLE.tipo = entero/logico) then ARITMETICA.tipo = entero/logico else ARITMETICA.tipo = "error" }
 	ARITMETICA -> SIMPLE  { ARITMETICA.tipo = SIMPLE.tipo }
 
-	SIMPLE -> negacion  SIMPLE1 { if(SIMPLE1.tipo = entero/logico) then SIMPLE.tipo = entero/logico; else SIMPLE.tipo = "error" } 
+	SIMPLE -> negacion  SIMPLE { if(SIMPLE1.tipo = entero/logico) then SIMPLE.tipo = entero/logico; else SIMPLE.tipo = "error" } 
 	SIMPLE -> abrePar  EXPRESION  cierraPar  { SIMPLE.tipo = EXPRESION.tipo }
 	SIMPLE -> id { SIMPLE.tipo = buscaTipoTS(id.ent) }
 	SIMPLE -> num  { SIMPLE.tipo = entero/logico }

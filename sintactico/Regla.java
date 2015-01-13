@@ -2,7 +2,9 @@ package sintactico;
 
 import java.util.Stack;
 
+import lexico.AnalizadorLexico;
 import semantico.Atributo;
+import global.ControladorErrores;
 import global.tabla.ControladorTS;
 
 public class Regla {
@@ -81,21 +83,30 @@ public class Regla {
 				sentencia = pilaSimbolos.peek();
 				expresion = pilaSimbolos.get(pilaSimbolos.size()-2);
 				if(expresion.getTipo().equals("entero/logico"))tipo = sentencia.getTipo();
-				else tipo = "error";
+				else {
+					tipo = "error";
+					ControladorErrores.addError("La condicion del if no es de tipo logico");
+				}
 				break;
 			case 11://BLOQUE -> if  abrePar  EXPRESION  cierraPar  SALTO  abreLlave  SALTO2  CUERPO  cierraLlave
 				//{ if(EXPRESION.tipo = "entero/logico") then BLOQUE.tipo = CUERPO.tipo; else BLOQUE.tipo = "error" }
 				cuerpo = pilaSimbolos.get(pilaSimbolos.size()-1);
 				expresion = pilaSimbolos.get(pilaSimbolos.size()-6);
 				if(expresion.getTipo().equals("entero/logico"))tipo = cuerpo.getTipo();
-				else tipo = "error";
+				else {
+					tipo = "error";
+					ControladorErrores.addError("La condicion del if no es de tipo logico");
+				}
 				break;
 			case 12://BLOQUE -> switch  abrePar  EXPRESION  cierraPar  SALTO  abreLlave  SALTO2  CASE  cierraLlave
 				//{ if(EXPRESION.tipo = "entero/logico") then BLOQUE.tipo = CASE.tipo; else BLOQUE.tipo = "error" }
 				caso = pilaSimbolos.get(pilaSimbolos.size()-1);
 				expresion = pilaSimbolos.get(pilaSimbolos.size()-6);
 				if(expresion.getTipo().equals("entero/logico"))tipo = caso.getTipo();
-				else tipo = "error";
+				else {
+					tipo = "error";
+					ControladorErrores.addError("La condicion del switch no es de tipo entero");
+				}
 				break;
 			case 13://CASE -> default  dosPuntos SALTO CUERPO
 				//{ CASE.tipo = CUERPO.tipo }
@@ -108,7 +119,10 @@ public class Regla {
 				cuerpo = pilaSimbolos.get(pilaSimbolos.size()-1);
 				expresion = pilaSimbolos.get(pilaSimbolos.size()-4);
 				if(expresion.getTipo().equals("entero/logico") && cuerpo.getTipo().equals("ok") && case2.getTipo().equals("ok"))tipo = "ok";
-				else tipo = "error";
+				else {
+					tipo = "error";
+					if(!expresion.getTipo().equals("entero/logico"))ControladorErrores.addError("La expresion del case no es de tipo entero");
+				}
 				break;
 			case 15://CASE2 -> CASE
 				//{ CASE2.tipo = CASE.tipo }
@@ -138,7 +152,10 @@ public class Regla {
 						ControladorTS.insertaTipoTS(id.getLexema(), expresion.getTipo());
 						tipo = "ok";
 					}
-					else tipo = "error";
+					else {
+						ControladorErrores.addError("El identificador \""+ id.getLexema() +"\" esta declarado anteriormente como una funcion");
+						tipo = "error";
+					}
 				}
 				else tipo = "error";
 				break;
@@ -147,21 +164,32 @@ public class Regla {
 				expresion = pilaSimbolos.peek();
 				id = pilaSimbolos.get(pilaSimbolos.size()-2);
 				if(id.getTipo().equals("entero/logico") && expresion.getTipo().equals("entero/logico"))tipo = "ok";
-				else tipo = "error";
+				else {
+					tipo = "error";
+					if(!id.getTipo().equals("entero/logico"))ControladorErrores.addError("El identificador \""+ id.getLexema() +"\" no es de tipo entero");
+					else ControladorErrores.addError("La parte derecha de la asignacion no es de tipo entero");
+				}
 				break;
 			case 20://SENTENCIA -> id  menosIgual  EXPRESION
 				//{ if (id.tipo = "entero/logico" && EXPRESION.tipo = "entero/logico") then SENTENCIA.tipo = "ok"; else SENTENCIA.tipo = "error" }
 				expresion = pilaSimbolos.peek();
 				id = pilaSimbolos.get(pilaSimbolos.size()-2);
 				if(id.getTipo().equals("entero/logico") && expresion.getTipo().equals("entero/logico"))tipo = "ok";
-				else tipo = "error";
+				else {
+					tipo = "error";
+					if(!id.getTipo().equals("entero/logico"))ControladorErrores.addError("El identificador \""+ id.getLexema() +"\" no es de tipo entero");
+					else ControladorErrores.addError("La parte derecha de la asignacion no es de tipo entero");
+				}
 				break;
 			case 21://SENTENCIA -> id  abrePar  LLAMADAFUN  cierraPar
 				//{ if(id.tipo = "funcion")then SENTENCIA.tipo = LLAMADAFUN.tipo; else SENTENCIA.tipo = "error" }
 				llamadaFun = pilaSimbolos.get(pilaSimbolos.size()-1);
 				id = pilaSimbolos.get(pilaSimbolos.size()-3);
 				if(id.getTipo().equals("funcion"))tipo = llamadaFun.getTipo();
-				else tipo = "error";
+				else {
+					tipo = "error";
+					ControladorErrores.addError("El identificador \""+ id.getLexema() +"\" no esta declarado como funcion");
+				}
 				break;
 			case 22://SENTENCIA -> document  punto  write  abrePar  EXPRESION  cierraPar
 				//{ if (EXPRESION.tipo != "error") then SENTENCIA.tipo = "ok"; else SENTENCIA.tipo="error" }
@@ -173,10 +201,13 @@ public class Regla {
 				//{ if (id.tipo!=funcion)then SENTENCIA.tipo = "ok"; else SENTENCIA.tipo = "error" }
 				id = pilaSimbolos.get(pilaSimbolos.size()-1);
 				if(!id.getTipo().equals("funcion"))tipo = "ok";
-				else tipo = "error";
+				else {
+					tipo = "error";
+					ControladorErrores.addError("El identificador \""+ id.getLexema() +"\" esta declarado como funcion");
+				}
 				break;
 			case 24://SENTENCIA -> return  RETURNVALUE
-				//{ if(RETURNVALUE.tipo == "entero/logico", "cadena", "vacio") then TSG.funcion.val_dev = RETURNVALUE.tipo, SENTENCIA.tipo = "ok"; else SENTENCIA.tipo = RETURNVALUE.tipo}
+				//{ if(RETURNVALUE.tipo == "entero/logico", "cadena", "vacio") then TSG.funcion.val_dev = RETURNVALUE.tipo, SENTENCIA.tipo = "ok"; else SENTENCIA.tipo = "error"}
 				returnValue = pilaSimbolos.peek();
 				if(returnValue.getTipo().equals("entero/logico") || returnValue.getTipo().equals("cadena") || returnValue.getTipo().equals("vacio")){
 					ControladorTS.insertaTipoDevTS(ControladorTS.getFuncion(), returnValue.getTipo());
@@ -257,14 +288,24 @@ public class Regla {
 				expresion = pilaSimbolos.get(pilaSimbolos.size()-2);
 				aritmetica = pilaSimbolos.peek();
 				if(expresion.getTipo().equals("entero/logico") && aritmetica.getTipo().equals("entero/logico")) tipo = "entero/logico";
-				else tipo = "error";
+				else {
+					tipo = "error";
+					if(!expresion.getTipo().equals("entero/logico"))ControladorErrores.addError("La parte izquierda de la comparacion no es de tipo logico");
+					else ControladorErrores.addError("La parte derecha de la comparacion no es de tipo logico");
+					
+				}
 				break;
 			case 41://EXPRESION -> EXPRESION  menorIgual  ARITMETICA
 				//{ if(EXPRESION1.tipo = entero/logico && ARITMETICA.tipo = entero/logico) then EXPRESION.tipo = entero/logico else EXPRESION.tipo = "error" }
 				expresion = pilaSimbolos.get(pilaSimbolos.size()-2);
 				aritmetica = pilaSimbolos.peek();
 				if(expresion.getTipo().equals("entero/logico") && aritmetica.getTipo().equals("entero/logico")) tipo = "entero/logico";
-				else tipo = "error";
+				else {
+					tipo = "error";
+					if(!expresion.getTipo().equals("entero/logico"))ControladorErrores.addError("La parte izquierda de la comparacion no es de tipo logico");
+					else ControladorErrores.addError("La parte derecha de la comparacion no es de tipo logico");
+					
+				}
 				break;
 			case 42://EXPRESION -> ARITMETICA  
 				//{ EXPRESION.tipo = ARITMETICA.tipo }
@@ -276,14 +317,22 @@ public class Regla {
 				aritmetica = pilaSimbolos.get(pilaSimbolos.size()-2);
 				simple = pilaSimbolos.peek();
 				if(aritmetica.getTipo().equals("entero/logico") && simple.getTipo().equals("entero/logico")) tipo = "entero/logico";
-				else tipo = "error";
+				else {
+					tipo = "error";
+					if(!aritmetica.getTipo().equals("entero/logico"))ControladorErrores.addError("La parte izquierda de la suma no es de tipo entero");
+					else ControladorErrores.addError("La parte derecha de la suma no es de tipo entero");
+				}
 				break;
 			case 44://ARITMETICA -> ARITMETICA  menos  SIMPLE 
 				//{ if(ARITMETICA1.tipo = entero/logico && SIMPLE.tipo = entero/logico) then ARITMETICA.tipo = entero/logico else ARITMETICA.tipo = "error" }
 				aritmetica = pilaSimbolos.get(pilaSimbolos.size()-2);
 				simple = pilaSimbolos.peek();
 				if(aritmetica.getTipo().equals("entero/logico") && simple.getTipo().equals("entero/logico")) tipo = "entero/logico";
-				else tipo = "error";
+				else {
+					tipo = "error";
+					if(!aritmetica.getTipo().equals("entero/logico"))ControladorErrores.addError("La parte izquierda de la resta no es de tipo entero");
+					else ControladorErrores.addError("La parte derecha de la resta no es de tipo entero");
+				}
 				break;
 			case 45://ARITMETICA -> SIMPLE 
 				//{ ARITMETICA.tipo = SIMPLE.tipo }
@@ -294,7 +343,10 @@ public class Regla {
 				//{ if(SIMPLE1.tipo = entero/logico) then SIMPLE.tipo = entero/logico; else SIMPLE.tipo = "error" }
 				simple = pilaSimbolos.peek();
 				if(simple.getTipo().equals("entero/logico")) tipo = "entero/logico";
-				else tipo = "error";
+				else {
+					tipo = "error";
+					ControladorErrores.addError("El elemento que se quiere negar no es de tipo logico");
+				}
 				break;
 			case 47://SIMPLE -> abrePar  EXPRESION  cierraPar
 				//{ SIMPLE.tipo = EXPRESION.tipo }
@@ -321,7 +373,10 @@ public class Regla {
 				if(llamadaFun.getTipo().equals("ok") && ControladorTS.buscaTipoTS(id.getLexema()).equals("funcion")){
 					tipo = ControladorTS.buscaTipoDevTS(id.getLexema());
 				}
-				else tipo = "error";
+				else {
+					tipo = "error";
+					if(llamadaFun.getTipo().equals("ok"))ControladorErrores.addError("El identificador \""+ id.getLexema() +"\" no esta declarado como funcion");
+				}
 				break;
 			default:
 				System.out.println("Error al ejecutar Accion Semantica, numero de regla incorrecto");
