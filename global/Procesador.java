@@ -27,7 +27,12 @@ public class Procesador {
 	}
 	
 	public static void main(String[] args) {
-		Procesador procesador = new Procesador(args[1]);
+		if(args.length < 1){
+			System.out.println("Uso: java -jar procesador.jar <nombre_fichero>");
+			System.out.println("\t" + "Ejemplo: java -jar procesador.jar fichero.js");
+			return;
+		}
+		Procesador procesador = new Procesador(args[0]);
 		// Crear tabla de símbolos global en la pila
 		ControladorTS.crearTS("Global");
 		int codSintactico = 1;

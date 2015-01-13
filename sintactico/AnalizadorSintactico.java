@@ -174,11 +174,11 @@ public class AnalizadorSintactico {
 	public int analizar(){
 		int resultado = 1; //En proceso
 		String estado = pilaEstados.peek();
-		System.out.println("Cima de la pila: " + estado);
-		System.out.println("Token: "+ tokenEntrada.aString());
+//		System.out.println("Cima de la pila: " + estado);
+//		System.out.println("Token: "+ tokenEntrada.aString());
 		String accion = buscarTabla(estado,tokenEntrada.tipo(),tablaAccion);
 		if(accion != null){
-			System.out.println("Accion: "+ accion);
+//			System.out.println("Accion: "+ accion);
 			if(accion.substring(0,1).equals("d")){//Desplazar
 				String tipo = "-";
 				if(tokenEntrada.tipo().equals("id")){
@@ -221,13 +221,14 @@ public class AnalizadorSintactico {
 					estado = buscarTabla(pilaEstados.peek(), regla.parteIzq, tablaGoTo);
 					pilaEstados.push(estado);
 					pilaSimbolos.push(new Atributo(regla.parteIzq,tipo));
-					System.out.println("GOTO: " + estado);
+//					System.out.println("GOTO: " + estado);
 					
 				}
 				
 			}
 			else if(accion.substring(0,1).equals("A")){//Aceptar
 				resultado = 0;
+				Regla.ejecutarAccion(1, pilaSimbolos);
 				parse.add(1);
 			}
 		}		
