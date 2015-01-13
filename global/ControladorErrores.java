@@ -25,7 +25,7 @@ public class ControladorErrores {
 			String error;
 			while(it.hasNext()){
 				error = it.next();
-				//System.out.println(error);
+				System.out.println("ERROR: " + error);
 				// añadir a fichero
 				writer.println("ERROR: " + error);
 			}

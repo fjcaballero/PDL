@@ -225,7 +225,7 @@ public class Regla {
 			case 25://CUERPO -> BLOQUE  SALTO2  CUERPO
 				//{ if (CUERPO1.tipo = "ok" && BLOQUE.tipo = "ok") then CUERPO.tipo = "ok"; else CUERPO.tipo = "error"}
 				cuerpo = pilaSimbolos.peek();
-				bloque = pilaSimbolos.get(pilaSimbolos.size()-2);
+				bloque = pilaSimbolos.get(pilaSimbolos.size()-3);
 				if(cuerpo.getTipo().equals("ok") && bloque.getTipo().equals("ok")) tipo = "ok";
 				else tipo = "error";
 				break;
@@ -251,7 +251,7 @@ public class Regla {
 			case 32://LLAMADAFUN -> EXPRESION  LLAMADAFUN2
 				//{ if(EXPRESION.tipo = "ok" && LLAMADAFUN2.tipo="ok") then LLAMADAFUN.tipo = "ok"; else LLAMADAFUN.tipo = "error" }
 				llamadaFun = pilaSimbolos.peek();
-				expresion = pilaSimbolos.get(pilaSimbolos.size()-1);
+				expresion = pilaSimbolos.get(pilaSimbolos.size()-2);
 				if(expresion.getTipo().equals("ok") && llamadaFun.getTipo().equals("ok")) tipo = "ok";
 				else tipo = "error";
 				break;
@@ -262,7 +262,7 @@ public class Regla {
 			case 34://LLAMADAFUN2 -> coma  EXPRESION  LLAMADAFUN2 
 				//{ if(EXPRESION.tipo != "error","vacio")then LLAMADAFUN2.tipo = LLAMADAFUN21.tipo; else LLAMADAFUN2.tipo = "error"}
 				llamadaFun21 = pilaSimbolos.peek();
-				expresion = pilaSimbolos.get(pilaSimbolos.size()-1);
+				expresion = pilaSimbolos.get(pilaSimbolos.size()-2);
 				if(!expresion.getTipo().equals("error") && !expresion.getTipo().equals("vacio"))tipo = llamadaFun21.getTipo();
 				else tipo = "error";
 				
@@ -291,7 +291,7 @@ public class Regla {
 				break;
 			case 40://EXPRESION -> EXPRESION  menor  ARITMETICA 
 				//{ if(EXPRESION1.tipo = entero/logico && ARITMETICA.tipo = entero/logico) then EXPRESION.tipo = entero/logico else EXPRESION.tipo = "error" }
-				expresion = pilaSimbolos.get(pilaSimbolos.size()-2);
+				expresion = pilaSimbolos.get(pilaSimbolos.size()-3);
 				aritmetica = pilaSimbolos.peek();
 				if(expresion.getTipo().equals("entero/logico") && aritmetica.getTipo().equals("entero/logico")) tipo = "entero/logico";
 				else {
@@ -303,7 +303,7 @@ public class Regla {
 				break;
 			case 41://EXPRESION -> EXPRESION  menorIgual  ARITMETICA
 				//{ if(EXPRESION1.tipo = entero/logico && ARITMETICA.tipo = entero/logico) then EXPRESION.tipo = entero/logico else EXPRESION.tipo = "error" }
-				expresion = pilaSimbolos.get(pilaSimbolos.size()-2);
+				expresion = pilaSimbolos.get(pilaSimbolos.size()-3);
 				aritmetica = pilaSimbolos.peek();
 				if(expresion.getTipo().equals("entero/logico") && aritmetica.getTipo().equals("entero/logico")) tipo = "entero/logico";
 				else {
@@ -320,7 +320,7 @@ public class Regla {
 				break;
 			case 43://ARITMETICA -> ARITMETICA  mas  SIMPLE 
 				//{ if(ARITMETICA1.tipo = entero/logico && SIMPLE.tipo = entero/logico) then ARITMETICA.tipo = entero/logico else ARITMETICA.tipo = "error" }
-				aritmetica = pilaSimbolos.get(pilaSimbolos.size()-2);
+				aritmetica = pilaSimbolos.get(pilaSimbolos.size()-3);
 				simple = pilaSimbolos.peek();
 				if(aritmetica.getTipo().equals("entero/logico") && simple.getTipo().equals("entero/logico")) tipo = "entero/logico";
 				else {
@@ -331,7 +331,7 @@ public class Regla {
 				break;
 			case 44://ARITMETICA -> ARITMETICA  menos  SIMPLE 
 				//{ if(ARITMETICA1.tipo = entero/logico && SIMPLE.tipo = entero/logico) then ARITMETICA.tipo = entero/logico else ARITMETICA.tipo = "error" }
-				aritmetica = pilaSimbolos.get(pilaSimbolos.size()-2);
+				aritmetica = pilaSimbolos.get(pilaSimbolos.size()-3);
 				simple = pilaSimbolos.peek();
 				if(aritmetica.getTipo().equals("entero/logico") && simple.getTipo().equals("entero/logico")) tipo = "entero/logico";
 				else {
@@ -356,7 +356,7 @@ public class Regla {
 				break;
 			case 47://SIMPLE -> abrePar  EXPRESION  cierraPar
 				//{ SIMPLE.tipo = EXPRESION.tipo }
-				expresion = pilaSimbolos.get(pilaSimbolos.size()-1);
+				expresion = pilaSimbolos.get(pilaSimbolos.size()-2);
 				tipo = expresion.getTipo();
 				break;
 			case 48://SIMPLE -> id 
@@ -374,8 +374,8 @@ public class Regla {
 				break;
 			case 51://SIMPLE -> id  abrePar  LLAMADAFUN  cierraPar 
 				//{ if(LLAMADAFUN.tipo = "ok" && id.tipo = "funcion") then SIMPLE.tipo = id.tipoDevuelto; else SIMPLE.tipo = "error"}
-				llamadaFun = pilaSimbolos.get(pilaSimbolos.size()-1);
-				id = pilaSimbolos.get(pilaSimbolos.size()-3);
+				llamadaFun = pilaSimbolos.get(pilaSimbolos.size()-2);
+				id = pilaSimbolos.get(pilaSimbolos.size()-4);
 				if(llamadaFun.getTipo().equals("ok") && ControladorTS.buscaTipoTS(id.getLexema()).equals("funcion")){
 					tipo = ControladorTS.buscaTipoDevTS(id.getLexema());
 				}
