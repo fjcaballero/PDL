@@ -22,7 +22,7 @@ public class Regla {
 	
 	public static String ejecutarAccion(int numRegla, Stack<Atributo> pilaSimbolos){
 		String tipo = "-";
-		Atributo programas, programa, bloque, funcion, sentencia, expresion, cuerpo, caso, case2, id, llamadaFun;
+		Atributo programas, programa, bloque, funcion, sentencia, expresion, cuerpo, caso, case2, id, llamadaFun, returnValue, argumentos2, argumentos21, aritmetica, simple;
 		switch(numRegla){
 			case 1://PROGRAMA0 -> PROGRAMAS
 				//{ if (PROGRAMAS.tipo = "ok") then SIN ERRORES; else ERROR }
@@ -156,34 +156,137 @@ public class Regla {
 				tipo = "ok";
 				break;
 			case 24://SENTENCIA -> return  RETURNVALUE
+				//{ if(RETURNVALUE.tipo != "ok", "error", "vacio") then TSG.funcion.val_dev = RETURNVALUE.tipo, SENTENCIA.tipo = "ok"; else SENTENCIA.tipo = RETURNVALUE.tipo}
+				/**
+				 * TODO
+				 */
 			case 25://CUERPO -> BLOQUE  SALTO2  CUERPO
+				//{ if (CUERPO1.tipo = "ok" && BLOQUE.tipo = "ok") then CUERPO.tipo = "ok" }
+				cuerpo = pilaSimbolos.peek();
+				bloque = pilaSimbolos.get(pilaSimbolos.size()-2);
+				if(cuerpo.getTipo().equals("ok") && bloque.getTipo().equals("ok")) tipo = "ok";
+				break;
 			case 26://CUERPO -> lambda
+				//{ CUERPO.tipo = "ok" }
+				tipo="ok";
+				break;
 			case 27://SALTO -> sl SALTO
+				break;
 			case 28://SALTO -> lambda
+				break;
 			case 29://SALTO2 -> sl SALTO
+				break;
 			case 30://RETURNVALUE -> EXPRESION 
+				//{ RETURNVALUE.tipo = EXPRESION.tipo }
+				expresion = pilaSimbolos.peek();
+				tipo = expresion.getTipo();
+				break;
 			case 31://RETURNVALUE -> lambda
-			case 32://LLAMADAFUN -> EXPRESION  LLAMADAFUN2  
+				//{ RETURNVALUE.tipo = "ok" }
+				tipo = "ok";
+				break;
+			case 32://LLAMADAFUN -> EXPRESION  LLAMADAFUN2
+				//{ if(EXPRESION.tipo = "ok" && LLAMADAFUN2.tipo="ok") then LLAMADAFUN.tipo = "ok" }
+				llamadaFun = pilaSimbolos.peek();
+				expresion = pilaSimbolos.get(pilaSimbolos.size());
+				if(expresion.getTipo().equals("ok") && llamadaFun.getTipo().equals("ok")) tipo = "ok";
+				break;
 			case 33://LLAMADAFUN -> lambda
+				//{ LLAMADAFUN.tipo = "ok" }
+				tipo = "ok";
+				break;
 			case 34://LLAMADAFUN2 -> coma  EXPRESION  LLAMADAFUN2 
+				//{ LLAMADAFUN2.tipo = LLAMADAFUN21.tipo }
+				llamadaFun = pilaSimbolos.peek();
+				tipo = llamadaFun.getTipo();
+				break;
 			case 35://LLAMADAFUN2 -> lambda
+				//{ LLAMADAFUN2.tipo = "ok" }
+				tipo = "ok";
+				break;
 			case 36://ARGUMENTOS -> id  ARGUMENTOS2 
+				//{ ARGUMENTOS.tipo = ARGUMENTOS2.tipo }
+				argumentos2 = pilaSimbolos.peek();
+				tipo = argumentos2.getTipo();
+				break;
 			case 37://ARGUMENTOS -> lambda
+				//{ ARGUMENTOS.tipo = "ok" }
+				tipo = "ok";
+				break;
 			case 38://ARGUMENTOS2 -> coma  id  ARGUMENTOS2
+				//{ ARGUMENTOS2.tipo = ARGUMENTOS21.tipo }
+				argumentos21 = pilaSimbolos.peek();
+				tipo = argumentos21.getTipo();
+				break;
 			case 39://ARGUMENTOS2 -> lambda
+				//{ ARGUMENTOS2.tipo = "ok" }
+				tipo = "ok";
+				break;
 			case 40://EXPRESION -> EXPRESION  menor  ARITMETICA 
+				//{ if(EXPRESION1.tipo = entero/logico && ARITMETICA.tipo = entero/logico) then ARITMETICA.tipo = entero/logico else ARITMETICA.tipo = "error" }
+				expresion = pilaSimbolos.get(pilaSimbolos.size()-2);
+				aritmetica = pilaSimbolos.peek();
+				if(expresion.getTipo().equals("entero/logico") && aritmetica.getTipo().equals("entero/logico")) tipo = "entero/logico";
+				else tipo = "error";
+				break;
 			case 41://EXPRESION -> EXPRESION  menorIgual  ARITMETICA
+				//{ if(EXPRESION1.tipo = entero/logico && ARITMETICA.tipo = entero/logico) then ARITMETICA.tipo = entero/logico else ARITMETICA.tipo = "error" }
+				expresion = pilaSimbolos.get(pilaSimbolos.size()-2);
+				aritmetica = pilaSimbolos.peek();
+				if(expresion.getTipo().equals("entero/logico") && aritmetica.getTipo().equals("entero/logico")) tipo = "entero/logico";
+				else tipo = "error";
+				break;
 			case 42://EXPRESION -> ARITMETICA  
+				//{ EXPRESION.tipo = ARITMETICA.tipo }
+				aritmetica = pilaSimbolos.peek();
+				tipo = aritmetica.getTipo();
+				break;
 			case 43://ARITMETICA -> ARITMETICA  mas  SIMPLE 
+				//{ if(ARITMETICA1.tipo = entero/logico && SIMPLE.tipo = entero/logico) then ARITMETICA.tipo = entero/logico else ARITMETICA.tipo = "error" }
+				aritmetica = pilaSimbolos.get(pilaSimbolos.size()-2);
+				simple = pilaSimbolos.peek();
+				if(aritmetica.getTipo().equals("entero/logico") && simple.getTipo().equals("entero/logico")) tipo = "entero/logico";
+				else tipo = "error";
+				break;
 			case 44://ARITMETICA -> ARITMETICA  menos  SIMPLE 
+				//{ if(ARITMETICA1.tipo = entero/logico && SIMPLE.tipo = entero/logico) then ARITMETICA.tipo = entero/logico else ARITMETICA.tipo = "error" }
+				aritmetica = pilaSimbolos.get(pilaSimbolos.size()-2);
+				simple = pilaSimbolos.peek();
+				if(aritmetica.getTipo().equals("entero/logico") && simple.getTipo().equals("entero/logico")) tipo = "entero/logico";
+				else tipo = "error";
+				break;
 			case 45://ARITMETICA -> SIMPLE 
+				//{ ARITMETICA.tipo = SIMPLE.tipo }
+				simple = pilaSimbolos.peek();
+				tipo = simple.getTipo();
 			case 46://SIMPLE -> negacion  SIMPLE  
-			case 47://SIMPLE -> abrePar  EXPRESION  cierraPar 
+				//{ if(SIMPLE1.tipo = entero/logico) then SIMPLE.tipo = entero/logico }
+				simple = pilaSimbolos.peek();
+				if(simple.getTipo().equals("entero/logico")) tipo = "entero/logico";
+				break;
+			case 47://SIMPLE -> abrePar  EXPRESION  cierraPar
+				//{ SIMPLE.tipo = EXPRESION.tipo }
+				expresion = pilaSimbolos.get(pilaSimbolos.size()-1);
+				tipo = expresion.getTipo();
+				break;
 			case 48://SIMPLE -> id 
+				//{ SIMPLE.tipo = buscaTipoTS(id.ent) }
+				/**
+				 * TODO
+				 */
 			case 49://SIMPLE -> num 
+				//{ SIMPLE.tipo = entero/logico }
+				tipo = "entero/logico";
+				break;
 			case 50://SIMPLE -> cad  
+				//{ SIMPLE.tipo = cadena }
+				tipo = "cadena";
+				break;
 			case 51://SIMPLE -> id  abrePar  LLAMADAFUN  cierraPar 
-				
+				//{ if(buscaTipoTS(id.ent)) = "X->T" && LLAMADAFUN.tipo = "X" then SIMPLE.tipo = "T" else SIMPLE.tipo = "error"}
+				/**
+				 * TODO 
+				 */
 			default:
 				System.out.println("Error al ejecutar Accion Semantica, numero de regla incorrecto");
 				break;
