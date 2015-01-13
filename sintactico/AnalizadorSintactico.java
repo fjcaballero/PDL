@@ -1,6 +1,7 @@
 package sintactico;
 
 import global.tabla.ControladorTS;
+import global.tabla.TablaSimbolos;
 import global.token.Identificador;
 import global.token.Token;
 
@@ -54,6 +55,9 @@ public class AnalizadorSintactico {
 		//Inicializar pila de estados
 		pilaEstados = new Stack<String>();
 		pilaEstados.push("0");
+		
+		//Inicializar pila de simbolos
+		pilaSimbolos = new Stack<Atributo>();
 
 		//Inicializar parse
 		parse = new ArrayList<Integer>();
@@ -191,7 +195,13 @@ public class AnalizadorSintactico {
 				/* Acciones semanticas */
 				if(tokenEntrada.tipo().equals("function")){
 					ControladorTS.flagDeclaracion();
+					ControladorTS.flagFunction();
 				}
+				if(tokenEntrada.tipo().equals("var")){
+					ControladorTS.flagDeclaracion();
+					ControladorTS.flagVar();
+				}
+				
 			}
 			else if(accion.substring(0,1).equals("r")){//Reducir
 				int numRegla = Integer.valueOf(accion.substring(1,accion.length()).trim());
@@ -218,6 +228,9 @@ public class AnalizadorSintactico {
 				/* Acciones semanticas */
 				if(numRegla == 15 /*FUNCION -> ...*/){
 					//borrar tabla de simbolos de funcion
+					TablaSimbolos local = ControladorTS.getPilaTablas().pop();
+					//guardar tabla para imprimir
+					ControladorTS.getPilaLocales().add(local);
 				}
 				
 			}

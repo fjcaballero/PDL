@@ -108,10 +108,12 @@ public class TablaSimbolos {
     
     public boolean insertaTipoTS(String lexema, String tipo){
     	boolean res = false;
-    	if(!indice.isEmpty()){
+    	if(!indice.isEmpty() && !entradas.isEmpty()){
     		if(indice.containsKey(lexema)){
-    			entradas.get(lexema).setTipo(tipo);
-    			res = true;
+    			if(entradas.containsKey(indice.get(lexema))){
+    				entradas.get(indice.get(lexema)).setTipo(tipo);
+        			res = true;
+    			}
     		}
     	}
     	return res;

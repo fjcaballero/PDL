@@ -165,7 +165,11 @@ public class ControladorTS {
 	public static Stack<TablaSimbolos> getPilaTablas() {
 		return pilaTablas;
 	}
-	
+
+	public static Stack<TablaSimbolos> getPilaLocales() {
+		return pilaLocales;
+	}
+
 	public static String getLexema(int pos, String nombreTabla){
 		String resultado = "";
 		boolean encontrado = false;

@@ -232,6 +232,7 @@ public class AnalizadorLexico {
 							if(!ControladorTS.getFlagVF()){ // function
 								pos = ControladorTS.insertaIdTS(lexema);
 								ControladorTS.insertaTipoTS(lexema, "funcion");
+								ControladorTS.setFuncion(lexema);
 								token = new Identificador(ControladorTS.nombreTablaActual(),pos);
 								ControladorTS.crearTS(lexema); // crear TS para la funcion
 								ControladorTS.flagUso();
