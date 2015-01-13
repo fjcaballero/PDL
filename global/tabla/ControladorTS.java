@@ -71,7 +71,7 @@ public class ControladorTS {
     }
     
     public static void eliminarTS(){
-        pilaTablas.pop();
+        pilaLocales.push(pilaTablas.pop());
     }
     
     public static String nombreTablaActual(){

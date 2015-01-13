@@ -40,8 +40,8 @@ public class Procesador {
 				System.out.println("Compilación correcta");
 				procesador.listarTokens();
 				procesador.listarParse();
-				procesador.listarErrores();
 				procesador.listarTablas();
+				procesador.listarErrores();
 			}
 		while(!ControladorTS.getPilaTablas().isEmpty()){
 			ControladorTS.eliminarTS();
@@ -109,6 +109,7 @@ public class Procesador {
 
 	private void listarTablas(){
 		ControladorTS.printTablas();
+		System.out.println("Fichero tabla_simbolos.txt generado");
 	}
 
 }

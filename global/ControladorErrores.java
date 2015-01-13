@@ -7,11 +7,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class ControladorErrores {
-	private static ArrayList<String> listaErrores;
-
-	public ControladorErrores() {
-
-	}
+	private static ArrayList<String> listaErrores =  new ArrayList<String>();
 
 	public static void addError(String error){
 		listaErrores.add(error);

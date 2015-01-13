@@ -49,9 +49,11 @@ public class TablaSimbolos {
     
     public String buscaTipoTS(String lexema){
     	String tipo = "-";
-    	if(!indice.isEmpty()){
+    	if(!indice.isEmpty() && !entradas.isEmpty()){
     		if(indice.containsKey(lexema)){
-    			tipo = entradas.get(lexema).getTipo();
+    			if(entradas.containsKey(indice.get(lexema))){
+    				tipo = entradas.get(indice.get(lexema)).getTipo();
+    			}
     		}
     	}
     	return tipo;
@@ -59,31 +61,37 @@ public class TablaSimbolos {
 
     public String buscaDespTS(String lexema){
         String desp = "-";
-        if(!indice.isEmpty()){
-            if(indice.containsKey(lexema)){
-                desp = entradas.get(lexema).getDesp();
-            }
-        }
+        if(!indice.isEmpty() && !entradas.isEmpty()){
+    		if(indice.containsKey(lexema)){
+    			if(entradas.containsKey(indice.get(lexema))){
+    				desp = entradas.get(indice.get(lexema)).getDesp();
+    			}
+    		}
+    	}
         return desp;
     }
 
     public int buscaNumParamTS(String lexema){
         int nparam = 0;
-        if(!indice.isEmpty()){
-            if(indice.containsKey(lexema)){
-                nparam = entradas.get(lexema).getNumParam();
-            }
-        }
+        if(!indice.isEmpty() && !entradas.isEmpty()){
+    		if(indice.containsKey(lexema)){
+    			if(entradas.containsKey(indice.get(lexema))){
+    				nparam = entradas.get(indice.get(lexema)).getNumParam();
+    			}
+    		}
+    	}
         return nparam;
     }
 
     public String buscaTipoDevTS(String lexema){
         String tipoDev = "-";
-        if(!indice.isEmpty()){
-            if(indice.containsKey(lexema)){
-                tipoDev = entradas.get(lexema).getTipoDev();
-            }
-        }
+        if(!indice.isEmpty() && !entradas.isEmpty()){
+    		if(indice.containsKey(lexema)){
+    			if(entradas.containsKey(indice.get(lexema))){
+    				tipoDev = entradas.get(indice.get(lexema)).getTipoDev();
+    			}
+    		}
+    	}
         return tipoDev;
     }
 
@@ -100,6 +108,7 @@ public class TablaSimbolos {
         if(!indice.containsKey(lexema)){
         	indice.put(lexema, n_entradas);
         	entradas.put(n_entradas, new EntradaTS(n_entradas));
+        	entradas.get(n_entradas).setLexema(lexema);
         	pos = n_entradas;
             n_entradas++;
         }
@@ -121,10 +130,12 @@ public class TablaSimbolos {
     
     public boolean insertaDespTS(String lexema, String desp){
     	boolean res = false;
-    	if(!indice.isEmpty()){
+    	if(!indice.isEmpty() && !entradas.isEmpty()){
     		if(indice.containsKey(lexema)){
-    			entradas.get(lexema).setDesp(desp);
-    			res = true;
+    			if(entradas.containsKey(indice.get(lexema))){
+    				entradas.get(indice.get(lexema)).setDesp(desp);
+        			res = true;
+    			}
     		}
     	}
     	return res;
@@ -132,10 +143,12 @@ public class TablaSimbolos {
     
     public boolean insertaNumParamTS(String lexema, int nparam){
     	boolean res = false;
-    	if(!indice.isEmpty()){
+    	if(!indice.isEmpty() && !entradas.isEmpty()){
     		if(indice.containsKey(lexema)){
-    			entradas.get(lexema).setNumParam(nparam);
-    			res = true;
+    			if(entradas.containsKey(indice.get(lexema))){
+    				entradas.get(indice.get(lexema)).setNumParam(nparam);
+        			res = true;
+    			}
     		}
     	}
     	return res;
@@ -143,10 +156,12 @@ public class TablaSimbolos {
     
     public boolean insertaTipoDevTS(String lexema, String tipoDev){
     	boolean res = false;
-    	if(!indice.isEmpty()){
+    	if(!indice.isEmpty() && !entradas.isEmpty()){
     		if(indice.containsKey(lexema)){
-    			entradas.get(lexema).setTipoDev(tipoDev);
-    			res = true;
+    			if(entradas.containsKey(indice.get(lexema))){
+    				entradas.get(indice.get(lexema)).setTipoDev(tipoDev);
+        			res = true;
+    			}
     		}
     	}
     	return res;
@@ -161,8 +176,9 @@ public class TablaSimbolos {
 		try {
 			writer = new PrintWriter(new BufferedWriter(new FileWriter("resources\\tabla_simbolos.txt", append)));
 			writer.println("Tabla de símbolos: " +this.nombreTabla);
-			writer.println("+ POS +     LEXEMA     +     TIPO      +  DESP   +    NUMPARAM    +    TIPODEV");
-			writer.println("+-----+----------------+---------------+---------+----------------+-----------------");
+			writer.println("---------------------------------------------------------------------------------------------------------");
+			writer.println(String.format("%15s | %15s | %15s | %15s | %15s | %15s", "POS", "LEXEMA", "TIPO", "DESP", "NPARAM", "TIPODEV"));
+			writer.println("---------------------------------------------------------------------------------------------------------");
 			Iterator<Entry<Integer, EntradaTS>> it = entradas.entrySet().iterator();
 			while(it.hasNext()){
 				Entry<Integer,EntradaTS> entrada = it.next();

@@ -17,8 +17,7 @@ public class EntradaTS {
 		this.tipoDev = "-";
 	}
 	public String aString(){
-		return  "+---------+--------------------+-------------------+-------------+--------------------+----------------"+ "\n" +
-				"| "+pos+" |     "+lexema+"     |     "+tipo+"      |  "+desp+"   |    "+numParam+"    |     "+tipoDev;
+		return  String.format("%15s | %15s | %15s | %15s | %15s | %15s", pos, lexema, tipo, desp, numParam, tipoDev);
 	}
 	
 	
