@@ -28,6 +28,7 @@ public class ControladorTS {
         add("var");
     }};
     private static boolean flagDU = false;//True = Declaracion, False = Uso
+    private static boolean flagVF = false;//True = Var, False = Function
     private static String funcionActual;
     
     public static void setFuncion(String funcion){
@@ -47,6 +48,17 @@ public class ControladorTS {
     }
     public static void flagUso(){
     	flagDU = false;
+    }
+    
+    public static boolean getFlagVF(){
+    	return flagVF;
+    }
+    
+    public static void flagVar(){
+    	flagVF = true;
+    }
+    public static void flagFunction(){
+    	flagVF = false;
     }
     
     

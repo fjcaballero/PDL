@@ -227,26 +227,31 @@ public class AnalizadorLexico {
 				 */
 				else{
 					int pos = ControladorTS.buscaIdTS(lexema);
-					if(ControladorTS.getFlagDU()){
-						if(pos==-1){
-							pos = ControladorTS.insertaIdTS(lexema);
-							ControladorTS.insertaTipoTS(lexema, "funcion");
+					if(ControladorTS.getFlagDU()){ // DECLARACION
+						if(pos==-1){ // identificador no declarado
+							if(!ControladorTS.getFlagVF()){ // function
+								pos = ControladorTS.insertaIdTS(lexema);
+								ControladorTS.insertaTipoTS(lexema, "funcion");
+								token = new Identificador(ControladorTS.nombreTablaActual(),pos);
+								ControladorTS.crearTS(lexema); // crear TS para la funcion
+								ControladorTS.flagUso();
+							}
+							else{ // var o variable sin declarar
+								pos = ControladorTS.insertaIdTS(lexema);
+								token = new Identificador(ControladorTS.nombreTablaActual(),pos);
+								ControladorTS.flagUso();
+							}
 						}
-						else{
-							//ERROR
+						else{ // identificador existe
+							//ERROR: Identificador ya declarado
 						}
-						token = new Identificador(ControladorTS.nombreTablaActual(),pos);
-						ControladorTS.crearTS(lexema); // crear TS para la funcion
-						ControladorTS.flagUso();
 					}
 					else{//USO
-						if(pos == -1){
+						if(pos == -1){ // identificador no declarado
 							pos = ControladorTS.insertaIdTS(lexema);
 						}
 						token = new Identificador(ControladorTS.nombreTablaActual(),pos);
 					}
-					
-					
 				}
 				leido = true;
 				break;
