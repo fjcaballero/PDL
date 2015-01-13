@@ -17,8 +17,8 @@ public class AnalizadorLexico {
 	private FileReader fileReader;
 	private BufferedReader bufferReader;
 	private String caracter;
-	private int lineaActual;
-	private int columnaActual;
+	public static int lineaActual;
+	public static int columnaActual;
 	private boolean flagSL;
 	private PrintWriter log;
 

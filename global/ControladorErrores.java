@@ -6,11 +6,15 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import lexico.AnalizadorLexico;
+
 public class ControladorErrores {
 	private static ArrayList<String> listaErrores =  new ArrayList<String>();
 
 	public static void addError(String error){
-		listaErrores.add(error);
+		String output = "Cerca de la linea: " + AnalizadorLexico.lineaActual + " Descripcion: " + error;
+		listaErrores.add(output);
+		System.out.println("ERROR: "+output);
 	}
 
 	public static void printErrors(){
