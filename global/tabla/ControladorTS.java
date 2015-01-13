@@ -175,5 +175,12 @@ public class ControladorTS {
 		}
 	}
     
+	public static String buscaTipoDevTS(String lexema){
+		return pilaTablas.peek().buscaTipoDevTS(lexema);
+	}
+	
+	public static void insertaTipoDevTS(String lexema, String tipo){
+		pilaTablas.peek().insertaTipoDevTS(lexema, tipo);
+	}
     
 }
