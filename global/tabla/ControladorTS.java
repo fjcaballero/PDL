@@ -75,7 +75,7 @@ public class ControladorTS {
     }
     
     public static String nombreTablaActual(){
-    	return pilaTablas.firstElement().getNombreTabla();
+    	return pilaTablas.peek().getNombreTabla();
     }
     
     public static int buscaIdTS(String id){
@@ -134,7 +134,7 @@ public class ControladorTS {
     
     public static int insertaIdTS(String id){
     	if(!pilaTablas.isEmpty()){
-    		return pilaTablas.firstElement().insertarTS(id);
+    		return pilaTablas.peek().insertarTS(id);
     	}
     	else{
     		return -1;
@@ -178,6 +178,7 @@ public class ControladorTS {
 			tabla = pilaTablas.get(i);
 			if(tabla.getNombreTabla().equals(nombreTabla)){
 				resultado = tabla.buscaLexemaTS(pos);
+				encontrado = true;
 			}
 		}
 		return resultado;

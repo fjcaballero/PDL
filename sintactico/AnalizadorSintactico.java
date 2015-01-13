@@ -225,14 +225,6 @@ public class AnalizadorSintactico {
 					
 				}
 				
-				/* Acciones semanticas */
-				if(numRegla == 15 /*FUNCION -> ...*/){
-					//borrar tabla de simbolos de funcion
-					TablaSimbolos local = ControladorTS.getPilaTablas().pop();
-					//guardar tabla para imprimir
-					ControladorTS.getPilaLocales().add(local);
-				}
-				
 			}
 			else if(accion.substring(0,1).equals("A")){//Aceptar
 				resultado = 0;
