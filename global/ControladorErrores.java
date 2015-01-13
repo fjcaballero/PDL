@@ -14,7 +14,6 @@ public class ControladorErrores {
 	public static void addError(String error){
 		String output = "Cerca de la linea: " + AnalizadorLexico.lineaActual + " Descripcion: " + error;
 		listaErrores.add(output);
-		System.out.println("ERROR: "+output);
 	}
 
 	public static void printErrors(){
@@ -29,6 +28,7 @@ public class ControladorErrores {
 				// añadir a fichero
 				writer.println("ERROR: " + error);
 			}
+			writer.close();
 			System.out.println("Fichero errores.txt generado");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

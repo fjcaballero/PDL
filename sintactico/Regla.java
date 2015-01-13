@@ -146,12 +146,6 @@ public class Regla {
 				//{if(id.tipo!=funcion)then id.tipo = EXPRESION.tipo, SENTENCIA.tipo = "ok"; else SENTENCIA.tipo="error" }
 				expresion = pilaSimbolos.peek();
 				id = pilaSimbolos.get(pilaSimbolos.size()-3);
-				System.out.println("---------------------------------------------------------");
-				System.out.println(pilaSimbolos.indexOf(pilaSimbolos.peek()));
-				System.out.println(pilaSimbolos.size());
-				System.out.println(id.getLexema());
-				System.out.println(expresion.getTipo());
-				System.out.println("---------------------------------------------------------");
 				if(!id.getLexema().equals("-") && (expresion.getTipo().equals("entero/logico") || expresion.getTipo().equals("cadena"))){
 					String tipoID = ControladorTS.buscaTipoTS(id.getLexema());
 					if(!tipoID.equals("funcion")){
