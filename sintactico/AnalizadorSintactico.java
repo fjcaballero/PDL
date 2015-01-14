@@ -1,5 +1,6 @@
 package sintactico;
 
+import global.ControladorErrores;
 import global.tabla.ControladorTS;
 import global.tabla.TablaSimbolos;
 import global.token.Identificador;
@@ -234,8 +235,7 @@ public class AnalizadorSintactico {
 		}		
 		else{
 			//Error Sintactico
-			System.out.println("Error sintáctico en la línea: "+ this.anLex.getLineaActual() +
-					" columna:"+this.anLex.getColumnaActual());
+			ControladorErrores.addError("Error Sintáctico en la línea: "+ this.anLex.getLineaActual() + " columna:"+ this.anLex.getColumnaActual());
 			resultado = -1;
 		}
 		return resultado;

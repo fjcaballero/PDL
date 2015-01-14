@@ -1,5 +1,6 @@
 package lexico;
 
+import global.ControladorErrores;
 import global.tabla.*;
 import global.token.*;
 
@@ -361,7 +362,7 @@ public class AnalizadorLexico {
 				break;
 			default:
 				// Error
-				System.out.println("Símbolo inesperado en la línea " + lineaActual + ", columna " + columnaActual);
+				ControladorErrores.addError("Símbolo inesperado en la línea " + lineaActual + ", columna " + columnaActual);
 				log.println("Símbolo inesperado en línea " + lineaActual + ", columna " + columnaActual);
 				leerCaracter();
 				leido = true;
