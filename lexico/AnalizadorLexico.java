@@ -233,6 +233,9 @@ public class AnalizadorLexico {
 							if(!ControladorTS.getFlagVF()){ // function
 								pos = ControladorTS.insertaIdTS(lexema);
 								ControladorTS.insertaTipoTS(lexema, "funcion");
+								int desp = ControladorTS.getDesp();
+								ControladorTS.insertaDespTS(lexema, Integer.toString(desp));
+								ControladorTS.sumDesp(1);
 								ControladorTS.setFuncion(lexema);
 								token = new Identificador(ControladorTS.nombreTablaActual(),pos);
 								ControladorTS.crearTS(lexema); // crear TS para la funcion
@@ -240,6 +243,9 @@ public class AnalizadorLexico {
 							}
 							else{ // var o variable sin declarar
 								pos = ControladorTS.insertaIdTS(lexema);
+								int desp = ControladorTS.getDesp();
+								ControladorTS.insertaDespTS(lexema, Integer.toString(desp));
+								ControladorTS.sumDesp(4);
 								token = new Identificador(ControladorTS.nombreTablaActual(),pos);
 								ControladorTS.flagUso();
 							}
@@ -251,6 +257,9 @@ public class AnalizadorLexico {
 					else{//USO
 						if(pos == -1){ // identificador no declarado
 							pos = ControladorTS.insertaIdTS(lexema);
+							int desp = ControladorTS.getDesp();
+							ControladorTS.insertaDespTS(lexema, Integer.toString(desp));
+							ControladorTS.sumDesp(4);
 						}
 						token = new Identificador(ControladorTS.nombreTablaActual(),pos);
 					}
