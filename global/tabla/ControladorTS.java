@@ -200,4 +200,16 @@ public class ControladorTS {
 		pilaTablas.peek().insertaTipoDevTS(lexema, tipo);
 	}
     
+	
+	public static int getDesp(){
+		return pilaTablas.peek().getDesp();
+	}
+	
+	public static void sumDesp(int x){
+		pilaTablas.peek().sumDesp(x);
+	}
+	
+	public static void insertaDespTS(String lexema, String desp){
+		pilaTablas.peek().insertaDespTS(lexema, desp);
+	}
 }

@@ -290,8 +290,8 @@ public class Regla {
 				if(expresion.getTipo().equals("entero/logico") && aritmetica.getTipo().equals("entero/logico")) tipo = "entero/logico";
 				else {
 					tipo = "error";
-					if(!expresion.getTipo().equals("entero/logico"))ControladorErrores.addError("La parte izquierda de la comparacion no es de tipo logico");
-					else ControladorErrores.addError("La parte derecha de la comparacion no es de tipo logico");
+					if(!expresion.getTipo().equals("entero/logico"))ControladorErrores.addError("La parte izquierda de la comparacion no es de tipo entero");
+					else ControladorErrores.addError("La parte derecha de la comparacion no es de tipo entero");
 					
 				}
 				break;
@@ -302,8 +302,8 @@ public class Regla {
 				if(expresion.getTipo().equals("entero/logico") && aritmetica.getTipo().equals("entero/logico")) tipo = "entero/logico";
 				else {
 					tipo = "error";
-					if(!expresion.getTipo().equals("entero/logico"))ControladorErrores.addError("La parte izquierda de la comparacion no es de tipo logico");
-					else ControladorErrores.addError("La parte derecha de la comparacion no es de tipo logico");
+					if(!expresion.getTipo().equals("entero/logico"))ControladorErrores.addError("La parte izquierda de la comparacion no es de tipo entero");
+					else ControladorErrores.addError("La parte derecha de la comparacion no es de tipo entero");
 					
 				}
 				break;

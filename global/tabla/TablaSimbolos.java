@@ -13,11 +13,13 @@ import java.util.Map.Entry;
 public class TablaSimbolos {
 	private String nombreTabla;
 	private int n_entradas = 1;
+	private int desp;
 	private HashMap<String,Integer> indice;
 	private HashMap<Integer,EntradaTS> entradas;
 	
 	public TablaSimbolos(String nombre){
 		this.nombreTabla = nombre;
+		this.desp = 0;
 		this.indice = new HashMap<String, Integer>();
 		this.entradas = new HashMap<Integer, EntradaTS>();
 	}
@@ -165,6 +167,14 @@ public class TablaSimbolos {
     		}
     	}
     	return res;
+    }
+    
+    public int getDesp(){
+    	return desp;
+    }
+    
+    public void sumDesp(int x){
+    	this.desp += x;
     }
 
 	public String getNombreTabla() {
