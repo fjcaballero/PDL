@@ -42,10 +42,12 @@ public class Procesador {
 		try {
 			procesador.anLex.getFileReader().close();
 			if(codSintactico == 0){
-				System.out.println("Compilación correcta");
 				procesador.listarTokens();
 				procesador.listarParse();
 				procesador.listarTablas();
+				procesador.listarErrores();
+			}
+			else{
 				procesador.listarErrores();
 			}
 		while(!ControladorTS.getPilaTablas().isEmpty()){
