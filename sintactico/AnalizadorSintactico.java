@@ -192,6 +192,7 @@ public class AnalizadorSintactico {
 				}
 				pilaEstados.push(accion.substring(1,accion.length()).trim());
 				tokenEntrada = anLex.leerToken();
+				if(tokenEntrada == null)return -1;
 				
 				/* Acciones semanticas */
 				if(tokenEntrada.tipo().equals("function")){
