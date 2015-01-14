@@ -1,5 +1,12 @@
 /* Prueba para comprobar la declaracion de funciones */
-function calcula (numero) {
+var var1
+var var2
+var cadena
+cadena = "cadenaacero"
+function calcula () {
+	var numero
+	var vlocal
+	numero = 5
 	if (numero < 0)
 	{
 		numero += 3
@@ -8,4 +15,3 @@ function calcula (numero) {
     	numero -= 3
     }
 }
-new_num = calcula(numero)

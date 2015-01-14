@@ -1,5 +1,4 @@
 /* Prueba para comprobar instrucciones de entrada/salida */
-
 var variable1
 var variable2
 
